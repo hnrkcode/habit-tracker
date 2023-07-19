@@ -15,6 +15,12 @@ type TaskProps = {
   subtasks: SubtaskProps[] | undefined;
 };
 
+type TaskItemProps = {
+  name: string;
+  duration: number;
+  onToggle?: () => void | null;
+};
+
 function Card({ children }: CardProps) {
   return (
     <div className="border-solid border-2 border-sky-500 m-2 p-2 rounded">
@@ -34,15 +40,21 @@ function Task({ name, duration, subtasks }: TaskProps) {
   if (subtasks?.length) {
     taskItem = (
       <Card>
-        <li onClick={handleToggleSubtasks}>
-          {name} ({duration})
-          {showSubtasks && (
-            <ul className="list-none pl-12">
-              {subtasks.map((subtask) => (
-                <Subtask name={subtask.name} duration={subtask.duration} />
-              ))}
-            </ul>
-          )}
+        <li>
+          <TaskItem
+            name={name}
+            duration={duration}
+            onToggle={handleToggleSubtasks}
+          />
+          <div>
+            {showSubtasks && (
+              <ul className="list-none pl-12">
+                {subtasks.map((subtask) => (
+                  <Subtask name={subtask.name} duration={subtask.duration} />
+                ))}
+              </ul>
+            )}
+          </div>
         </li>
       </Card>
     );
@@ -50,7 +62,11 @@ function Task({ name, duration, subtasks }: TaskProps) {
     taskItem = (
       <Card>
         <li>
-          {name} ({duration})
+          <TaskItem
+            name={name}
+            duration={duration}
+            onToggle={handleToggleSubtasks}
+          />
         </li>
       </Card>
     );
@@ -59,10 +75,23 @@ function Task({ name, duration, subtasks }: TaskProps) {
   return taskItem;
 }
 
+function TaskItem({ name, duration, onToggle }: TaskItemProps) {
+  return (
+    <div className="flex justify-between">
+      <div onClick={onToggle}>
+        {name} ({duration})
+      </div>
+      <div>
+        <input type="checkbox" />
+      </div>
+    </div>
+  );
+}
+
 function Subtask({ name, duration }: SubtaskProps) {
   return (
     <li>
-      {name} ({duration})
+      <TaskItem name={name} duration={duration} />
     </li>
   );
 }
