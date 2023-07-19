@@ -1,4 +1,5 @@
 import { ReactNode, useState } from "react";
+import { FaAngleUp, FaAngleDown } from "react-icons/fa";
 
 type CardProps = {
   children: ReactNode;
@@ -18,7 +19,8 @@ type TaskProps = {
 type TaskItemProps = {
   name: string;
   duration: number;
-  onToggle?: () => void | null;
+  showSubtasks?: boolean | undefined;
+  onToggle?: () => void | undefined;
 };
 
 function Card({ children }: CardProps) {
@@ -44,6 +46,7 @@ function Task({ name, duration, subtasks }: TaskProps) {
           <TaskItem
             name={name}
             duration={duration}
+            showSubtasks={showSubtasks}
             onToggle={handleToggleSubtasks}
           />
           <div>
@@ -75,15 +78,21 @@ function Task({ name, duration, subtasks }: TaskProps) {
   return taskItem;
 }
 
-function TaskItem({ name, duration, onToggle }: TaskItemProps) {
+function TaskItem({ name, duration, showSubtasks, onToggle }: TaskItemProps) {
+  const toggleSubTasksBtn = showSubtasks ? <FaAngleUp /> : <FaAngleDown />;
+
   return (
     <div className="flex justify-between">
-      <div onClick={onToggle}>
+      <div className="flex items-center">
+        <input type="checkbox" className="mr-2" />
         {name} ({duration})
       </div>
-      <div>
-        <input type="checkbox" />
-      </div>
+
+      {showSubtasks !== undefined && (
+        <div onClick={onToggle} className="flex justify-center items-center">
+          {toggleSubTasksBtn}
+        </div>
+      )}
     </div>
   );
 }
