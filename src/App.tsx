@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 
 type CardProps = {
   children: ReactNode;
@@ -24,18 +24,25 @@ function Card({ children }: CardProps) {
 }
 
 function Task({ name, duration, subtasks }: TaskProps) {
+  const [showSubtasks, setShowSubtasks] = useState(false);
   let taskItem = null;
+
+  function handleToggleSubtasks() {
+    setShowSubtasks(!showSubtasks);
+  }
 
   if (subtasks?.length) {
     taskItem = (
       <Card>
-        <li>
+        <li onClick={handleToggleSubtasks}>
           {name} ({duration})
-          <ul className="list-none pl-12">
-            {subtasks.map((subtask) => (
-              <Subtask name={subtask.name} duration={subtask.duration} />
-            ))}
-          </ul>
+          {showSubtasks && (
+            <ul className="list-none pl-12">
+              {subtasks.map((subtask) => (
+                <Subtask name={subtask.name} duration={subtask.duration} />
+              ))}
+            </ul>
+          )}
         </li>
       </Card>
     );
