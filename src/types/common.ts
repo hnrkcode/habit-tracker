@@ -7,7 +7,6 @@ export type SubtasksType = SubtaskType[];
 export type TaskType = {
   id: string;
   name: string;
-  duration: number;
   done: boolean;
   subtasks?: SubtasksType | undefined;
 };
@@ -16,7 +15,6 @@ export type SubtaskType = {
   taskId: string;
   subtaskId: string;
   name: string;
-  duration: number;
   done: boolean;
 };
 
@@ -28,7 +26,6 @@ export type SubtaskProps = {
   taskId: string;
   subtaskId: string;
   name: string;
-  duration: number;
   done: boolean;
   onSubtaskCheckbox?: (taskId: string, subtaskId: string) => void;
 };
@@ -48,7 +45,6 @@ export type TasksProps = {
 export type TaskItemProps = {
   id: string;
   name: string;
-  duration: number;
   done: boolean;
   showSubtasks?: boolean | undefined;
   onToggle?: () => void | undefined;
@@ -58,7 +54,6 @@ export type TaskItemProps = {
 export type SubtaskItemProps = {
   id: string;
   name: string;
-  duration: number;
   done: boolean;
   onCheckbox: (id: string) => void | undefined;
 };

@@ -4,7 +4,6 @@ import { FaAngleUp, FaAngleDown, FaPen } from "react-icons/fa";
 export default function TaskItem({
   id,
   name,
-  duration,
   done,
   showSubtasks,
   onToggle,

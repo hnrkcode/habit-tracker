@@ -23,7 +23,6 @@ export default function Task({
           taskId={task.id}
           subtaskId={subtask.subtaskId}
           name={subtask.name}
-          duration={subtask.duration}
           done={subtask.done}
           onSubtaskCheckbox={onSubtaskCheckbox}
         />
@@ -37,7 +36,6 @@ export default function Task({
         <TaskItem
           id={task.id}
           name={task.name}
-          duration={task.duration}
           done={task.done}
           showSubtasks={task.subtasks ? showSubtasks : undefined}
           onToggle={handleToggleSubtasks}

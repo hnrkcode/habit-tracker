@@ -5,7 +5,6 @@ export default function Subtask({
   taskId,
   subtaskId,
   name,
-  duration,
   done,
   onSubtaskCheckbox,
 }: SubtaskProps) {
@@ -14,7 +13,6 @@ export default function Subtask({
       <SubtaskItem
         id={subtaskId}
         name={name}
-        duration={duration}
         done={done}
         onCheckbox={() =>
           onSubtaskCheckbox && onSubtaskCheckbox(taskId, subtaskId)

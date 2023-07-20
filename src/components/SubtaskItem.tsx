@@ -3,7 +3,6 @@ import { SubtaskItemProps } from "../types/common";
 export default function SubtaskItem({
   id,
   name,
-  duration,
   done,
   onCheckbox,
 }: SubtaskItemProps) {

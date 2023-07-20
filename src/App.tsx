@@ -91,28 +91,24 @@ const initialTasks = [
   {
     id: "74771701-e411-4ce2-ab9f-2de55bfcefbf",
     name: "Task 1",
-    duration: 20,
     done: false,
     subtasks: [
       {
         taskId: "74771701-e411-4ce2-ab9f-2de55bfcefbf",
         subtaskId: "feb714e4-96b0-4874-97ca-a8ea429d9591",
         name: "Subtask 1",
-        duration: 5,
         done: false,
       },
       {
         taskId: "74771701-e411-4ce2-ab9f-2de55bfcefbf",
         subtaskId: "2655a21a-4146-42f5-815e-ad863686c88f",
         name: "Subtask 2",
-        duration: 5,
         done: true,
       },
       {
         taskId: "74771701-e411-4ce2-ab9f-2de55bfcefbf",
         subtaskId: "3d8e4f92-76a4-4b2b-847a-33431085e3bc",
         name: "Subtask 3",
-        duration: 10,
         done: false,
       },
     ],
@@ -120,7 +116,6 @@ const initialTasks = [
   {
     id: "33d7d82a-c260-4f90-ace9-f7785ad555a7",
     name: "Task 2",
-    duration: 25,
     done: false,
   },
 ];
