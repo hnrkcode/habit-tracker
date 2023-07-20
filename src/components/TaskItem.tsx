@@ -21,7 +21,7 @@ export default function TaskItem({
           checked={done}
           onChange={() => onCheckbox && onCheckbox(id)}
         />
-        {name} ({duration})
+        {name}
       </div>
 
       {showSubtasks !== undefined && (
