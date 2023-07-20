@@ -1,5 +1,5 @@
 import { SubtaskProps } from "../types/common";
-import TaskItem from "./TaskItem";
+import SubtaskItem from "./SubtaskItem";
 
 export default function Subtask({
   taskId,
@@ -11,7 +11,7 @@ export default function Subtask({
 }: SubtaskProps) {
   return (
     <li>
-      <TaskItem
+      <SubtaskItem
         id={subtaskId}
         name={name}
         duration={duration}

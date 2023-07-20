@@ -55,6 +55,14 @@ export type TaskItemProps = {
   onCheckbox?: (id: string) => void | undefined;
 };
 
+export type SubtaskItemProps = {
+  id: string;
+  name: string;
+  duration: number;
+  done: boolean;
+  onCheckbox: (id: string) => void | undefined;
+};
+
 export type NavbarProps = {
   onAddTask: () => void;
 };

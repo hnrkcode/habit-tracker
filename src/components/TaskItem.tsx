@@ -1,5 +1,5 @@
 import { TaskItemProps } from "../types/common";
-import { FaAngleUp, FaAngleDown } from "react-icons/fa";
+import { FaAngleUp, FaAngleDown, FaPen } from "react-icons/fa";
 
 export default function TaskItem({
   id,
@@ -21,7 +21,8 @@ export default function TaskItem({
           checked={done}
           onChange={() => onCheckbox && onCheckbox(id)}
         />
-        {name}
+        <span className="mr-2">{name}</span>
+        <FaPen />
       </div>
 
       {showSubtasks !== undefined && (
