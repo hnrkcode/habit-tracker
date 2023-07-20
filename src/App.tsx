@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Task from "./components/Task";
+import Tasks from "./components/Tasks";
 
 export default function App() {
   const [tasks, setTasks] = useState(initialTasks);
@@ -57,20 +57,11 @@ export default function App() {
   return (
     <>
       <h1 className="text-center uppercase font-bold text-2xl">Tasks</h1>
-      <ul>
-        {tasks.map((task) => (
-          <Task
-            key={task.id}
-            id={task.id}
-            name={task.name}
-            duration={task.duration}
-            done={task.done}
-            subtasks={task.subtasks}
-            onTaskCheckbox={handleTaskCheckbox}
-            onSubtaskCheckbox={handleSubTaskCheckbox}
-          />
-        ))}
-      </ul>
+      <Tasks
+        tasks={tasks}
+        onTaskCheckbox={handleTaskCheckbox}
+        onSubtaskCheckbox={handleSubTaskCheckbox}
+      />
     </>
   );
 }

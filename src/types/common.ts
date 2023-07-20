@@ -1,5 +1,25 @@
 import { ReactNode } from "react";
 
+type Tasks = Task[];
+
+type Subtasks = Subtask[];
+
+type Task = {
+  id: number;
+  name: string;
+  duration: number;
+  done: boolean;
+  subtasks?: Subtasks | undefined;
+};
+
+type Subtask = {
+  taskId: number;
+  subtaskId: number;
+  name: string;
+  duration: number;
+  done: boolean;
+};
+
 export type CardProps = {
   children: ReactNode;
 };
@@ -19,6 +39,12 @@ export type TaskProps = {
   duration: number;
   done: boolean;
   subtasks: SubtaskProps[] | undefined;
+  onTaskCheckbox: (id: number) => void;
+  onSubtaskCheckbox: (taskId: number, subtaskId: number) => void;
+};
+
+export type TasksProps = {
+  tasks: Tasks;
   onTaskCheckbox: (id: number) => void;
   onSubtaskCheckbox: (taskId: number, subtaskId: number) => void;
 };
