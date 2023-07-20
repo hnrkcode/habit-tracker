@@ -5,11 +5,7 @@ import Card from "./Card";
 import Subtask from "./Subtask";
 
 export default function Task({
-  id,
-  name,
-  duration,
-  done,
-  subtasks,
+  task,
   onTaskCheckbox,
   onSubtaskCheckbox,
 }: TaskProps) {
@@ -20,15 +16,15 @@ export default function Task({
     setShowSubtasks(!showSubtasks);
   }
 
-  if (subtasks?.length) {
+  if (task.subtasks?.length) {
     taskItem = (
       <Card>
         <li>
           <TaskItem
-            id={id}
-            name={name}
-            duration={duration}
-            done={done}
+            id={task.id}
+            name={task.name}
+            duration={task.duration}
+            done={task.done}
             showSubtasks={showSubtasks}
             onToggle={handleToggleSubtasks}
             onCheckbox={onTaskCheckbox}
@@ -36,10 +32,10 @@ export default function Task({
           <div>
             {showSubtasks && (
               <ul className="list-none pl-12">
-                {subtasks.map((subtask) => (
+                {task.subtasks.map((subtask) => (
                   <Subtask
                     key={subtask.subtaskId}
-                    taskId={id}
+                    taskId={task.id}
                     subtaskId={subtask.subtaskId}
                     name={subtask.name}
                     duration={subtask.duration}
@@ -58,10 +54,10 @@ export default function Task({
       <Card>
         <li>
           <TaskItem
-            id={id}
-            name={name}
-            duration={duration}
-            done={done}
+            id={task.id}
+            name={task.name}
+            duration={task.duration}
+            done={task.done}
             onToggle={handleToggleSubtasks}
             onCheckbox={onTaskCheckbox}
           />

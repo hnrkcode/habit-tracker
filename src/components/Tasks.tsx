@@ -11,11 +11,7 @@ export default function Tasks({
       {tasks.map((task) => (
         <Task
           key={task.id}
-          id={task.id}
-          name={task.name}
-          duration={task.duration}
-          done={task.done}
-          subtasks={task.subtasks}
+          task={task}
           onTaskCheckbox={onTaskCheckbox}
           onSubtaskCheckbox={onSubtaskCheckbox}
         />

@@ -34,11 +34,7 @@ export type SubtaskProps = {
 };
 
 export type TaskProps = {
-  id: number;
-  name: string;
-  duration: number;
-  done: boolean;
-  subtasks: SubtaskProps[] | undefined;
+  task: Task;
   onTaskCheckbox: (id: number) => void;
   onSubtaskCheckbox: (taskId: number, subtaskId: number) => void;
 };
