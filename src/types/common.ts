@@ -54,3 +54,13 @@ export type TaskItemProps = {
   onToggle?: () => void | undefined;
   onCheckbox?: (id: number) => void | undefined;
 };
+
+export type NavbarProps = {
+  onAddTask: () => void;
+};
+
+export type ModalProps = {
+  isOpen: boolean;
+  onClose: () => void;
+  children: ReactNode;
+};

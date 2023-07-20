@@ -1,8 +1,15 @@
 import { useState } from "react";
 import Tasks from "./components/Tasks";
+import Navbar from "./components/Navbar";
+import Modal from "./components/Modal";
 
 export default function App() {
   const [tasks, setTasks] = useState(initialTasks);
+  const [showModal, setShowModal] = useState(false);
+
+  function handleModal() {
+    setShowModal(!showModal);
+  }
 
   function handleTaskCheckbox(id: number) {
     setTasks((prevTasks) =>
@@ -56,12 +63,20 @@ export default function App() {
 
   return (
     <>
+      <Navbar onAddTask={handleModal} />
       <h1 className="text-center uppercase font-bold text-2xl">Tasks</h1>
       <Tasks
         tasks={tasks}
         onTaskCheckbox={handleTaskCheckbox}
         onSubtaskCheckbox={handleSubTaskCheckbox}
       />
+      <Modal isOpen={showModal} onClose={handleModal}>
+        <h1 className="text-xl font-semibold mb-4">This is a Modal</h1>
+        <p>
+          You can put any content here, such as forms, messages, images, or any
+          other React components.
+        </p>
+      </Modal>
     </>
   );
 }
