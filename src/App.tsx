@@ -2,6 +2,8 @@ import { useState } from "react";
 import Tasks from "./components/Tasks";
 import Navbar from "./components/Navbar";
 import Modal from "./components/Modal";
+import NewTaskForm from "./components/NewTaskForm";
+import { TaskType } from "./types/common";
 
 export default function App() {
   const [tasks, setTasks] = useState(initialTasks);
@@ -11,7 +13,12 @@ export default function App() {
     setShowModal(!showModal);
   }
 
-  function handleTaskCheckbox(id: number) {
+  function handleCreateTask(task: TaskType) {
+    setTasks((prevTasks) => [...prevTasks, task]);
+    setShowModal(!showModal);
+  }
+
+  function handleTaskCheckbox(id: string) {
     setTasks((prevTasks) =>
       prevTasks.map((task) => {
         if (task.id === id) {
@@ -32,7 +39,7 @@ export default function App() {
     );
   }
 
-  function handleSubTaskCheckbox(taskId: number, subtaskId: number) {
+  function handleSubTaskCheckbox(taskId: string, subtaskId: string) {
     setTasks((prevTasks) =>
       prevTasks.map((task) => {
         if (task.id === taskId) {
@@ -71,11 +78,10 @@ export default function App() {
         onSubtaskCheckbox={handleSubTaskCheckbox}
       />
       <Modal isOpen={showModal} onClose={handleModal}>
-        <h1 className="text-xl font-semibold mb-4">This is a Modal</h1>
-        <p>
-          You can put any content here, such as forms, messages, images, or any
-          other React components.
-        </p>
+        <NewTaskForm
+          onSave={handleCreateTask}
+          onCancel={() => setShowModal(!showModal)}
+        />
       </Modal>
     </>
   );
@@ -83,16 +89,28 @@ export default function App() {
 
 const initialTasks = [
   {
-    id: 0,
+    id: "74771701-e411-4ce2-ab9f-2de55bfcefbf",
     name: "Task 1",
     duration: 20,
     done: false,
     subtasks: [
-      { taskId: 0, subtaskId: 10, name: "Subtask 1", duration: 5, done: false },
-      { taskId: 0, subtaskId: 11, name: "Subtask 2", duration: 5, done: true },
       {
-        taskId: 0,
-        subtaskId: 12,
+        taskId: "74771701-e411-4ce2-ab9f-2de55bfcefbf",
+        subtaskId: "feb714e4-96b0-4874-97ca-a8ea429d9591",
+        name: "Subtask 1",
+        duration: 5,
+        done: false,
+      },
+      {
+        taskId: "74771701-e411-4ce2-ab9f-2de55bfcefbf",
+        subtaskId: "2655a21a-4146-42f5-815e-ad863686c88f",
+        name: "Subtask 2",
+        duration: 5,
+        done: true,
+      },
+      {
+        taskId: "74771701-e411-4ce2-ab9f-2de55bfcefbf",
+        subtaskId: "3d8e4f92-76a4-4b2b-847a-33431085e3bc",
         name: "Subtask 3",
         duration: 10,
         done: false,
@@ -100,7 +118,7 @@ const initialTasks = [
     ],
   },
   {
-    id: 1,
+    id: "33d7d82a-c260-4f90-ace9-f7785ad555a7",
     name: "Task 2",
     duration: 25,
     done: false,

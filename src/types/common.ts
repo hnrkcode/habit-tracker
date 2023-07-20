@@ -1,20 +1,20 @@
 import { ReactNode } from "react";
 
-type Tasks = Task[];
+export type TasksType = TaskType[];
 
-type Subtasks = Subtask[];
+export type SubtasksType = SubtaskType[];
 
-type Task = {
-  id: number;
+export type TaskType = {
+  id: string;
   name: string;
   duration: number;
   done: boolean;
-  subtasks?: Subtasks | undefined;
+  subtasks?: SubtasksType | undefined;
 };
 
-type Subtask = {
-  taskId: number;
-  subtaskId: number;
+export type SubtaskType = {
+  taskId: string;
+  subtaskId: string;
   name: string;
   duration: number;
   done: boolean;
@@ -25,34 +25,34 @@ export type CardProps = {
 };
 
 export type SubtaskProps = {
-  taskId: number;
-  subtaskId: number;
+  taskId: string;
+  subtaskId: string;
   name: string;
   duration: number;
   done: boolean;
-  onSubtaskCheckbox?: (taskId: number, subtaskId: number) => void;
+  onSubtaskCheckbox?: (taskId: string, subtaskId: string) => void;
 };
 
 export type TaskProps = {
-  task: Task;
-  onTaskCheckbox: (id: number) => void;
-  onSubtaskCheckbox: (taskId: number, subtaskId: number) => void;
+  task: TaskType;
+  onTaskCheckbox: (id: string) => void;
+  onSubtaskCheckbox: (taskId: string, subtaskId: string) => void;
 };
 
 export type TasksProps = {
-  tasks: Tasks;
-  onTaskCheckbox: (id: number) => void;
-  onSubtaskCheckbox: (taskId: number, subtaskId: number) => void;
+  tasks: TasksType;
+  onTaskCheckbox: (id: string) => void;
+  onSubtaskCheckbox: (taskId: string, subtaskId: string) => void;
 };
 
 export type TaskItemProps = {
-  id: number;
+  id: string;
   name: string;
   duration: number;
   done: boolean;
   showSubtasks?: boolean | undefined;
   onToggle?: () => void | undefined;
-  onCheckbox?: (id: number) => void | undefined;
+  onCheckbox?: (id: string) => void | undefined;
 };
 
 export type NavbarProps = {
@@ -63,4 +63,9 @@ export type ModalProps = {
   isOpen: boolean;
   onClose: () => void;
   children: ReactNode;
+};
+
+export type NewTaskFormProps = {
+  onSave: (task: TaskType) => void;
+  onCancel: () => void;
 };
