@@ -34,12 +34,14 @@ export type TaskProps = {
   task: TaskType;
   onTaskCheckbox: (id: string) => void;
   onSubtaskCheckbox: (taskId: string, subtaskId: string) => void;
+  onEditTask: (id: string) => void;
 };
 
 export type TasksProps = {
   tasks: TasksType;
   onTaskCheckbox: (id: string) => void;
   onSubtaskCheckbox: (taskId: string, subtaskId: string) => void;
+  onEditTask: (id: string) => void;
 };
 
 export type TaskItemProps = {
@@ -49,6 +51,7 @@ export type TaskItemProps = {
   showSubtasks?: boolean | undefined;
   onToggle?: () => void | undefined;
   onCheckbox?: (id: string) => void | undefined;
+  onEditTask: (id: string) => void;
 };
 
 export type SubtaskItemProps = {
@@ -69,6 +72,13 @@ export type ModalProps = {
 };
 
 export type NewTaskFormProps = {
+  onSave: (task: TaskType) => void;
+  onCancel: () => void;
+};
+
+export type EditTaskFormProps = {
+  taskId: string;
+  tasks: TasksType;
   onSave: (task: TaskType) => void;
   onCancel: () => void;
 };

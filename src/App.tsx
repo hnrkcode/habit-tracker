@@ -3,19 +3,41 @@ import Tasks from "./components/Tasks";
 import Navbar from "./components/Navbar";
 import Modal from "./components/Modal";
 import NewTaskForm from "./components/NewTaskForm";
+import EditTaskForm from "./components/EditTaskForm";
 import { TaskType } from "./types/common";
 
 export default function App() {
   const [tasks, setTasks] = useState(initialTasks);
   const [showModal, setShowModal] = useState(false);
+  const [modalAction, setModalAction] = useState("create");
+  const [editTaskId, setEditTaskId] = useState("");
 
-  function handleModal() {
+  function handleModal(action: string) {
     setShowModal(!showModal);
+    setModalAction(action);
   }
 
   function handleCreateTask(task: TaskType) {
     setTasks((prevTasks) => [...prevTasks, task]);
     setShowModal(!showModal);
+  }
+
+  function handleEditTask(task: TaskType) {
+    setTasks((prevTasks) =>
+      prevTasks.map((prevTask) =>
+        prevTask.id === task.id ? { ...task } : prevTask
+      )
+    );
+    setShowModal(!showModal);
+  }
+
+  function handleOpenCreateModal() {
+    handleModal("create");
+  }
+
+  function handleOpenEditModal(id: string) {
+    handleModal("edit");
+    setEditTaskId(id);
   }
 
   function handleTaskCheckbox(id: string) {
@@ -70,18 +92,29 @@ export default function App() {
 
   return (
     <>
-      <Navbar onAddTask={handleModal} />
+      <Navbar onAddTask={handleOpenCreateModal} />
       <h1 className="text-center uppercase font-bold text-2xl">Tasks</h1>
       <Tasks
         tasks={tasks}
         onTaskCheckbox={handleTaskCheckbox}
         onSubtaskCheckbox={handleSubTaskCheckbox}
+        onEditTask={handleOpenEditModal}
       />
-      <Modal isOpen={showModal} onClose={handleModal}>
-        <NewTaskForm
-          onSave={handleCreateTask}
-          onCancel={() => setShowModal(!showModal)}
-        />
+      <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
+        {modalAction === "create" && (
+          <NewTaskForm
+            onSave={handleCreateTask}
+            onCancel={() => setShowModal(!showModal)}
+          />
+        )}
+        {modalAction === "edit" && (
+          <EditTaskForm
+            taskId={editTaskId}
+            tasks={tasks}
+            onSave={handleEditTask}
+            onCancel={() => setShowModal(!showModal)}
+          />
+        )}
       </Modal>
     </>
   );

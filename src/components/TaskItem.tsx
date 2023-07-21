@@ -8,6 +8,7 @@ export default function TaskItem({
   showSubtasks,
   onToggle,
   onCheckbox,
+  onEditTask,
 }: TaskItemProps) {
   const toggleSubTasksBtn = showSubtasks ? <FaAngleUp /> : <FaAngleDown />;
 
@@ -21,7 +22,7 @@ export default function TaskItem({
           onChange={() => onCheckbox && onCheckbox(id)}
         />
         <span className="mr-2">{name}</span>
-        <FaPen />
+        <FaPen onClick={() => onEditTask(id)} />
       </div>
 
       {showSubtasks !== undefined && (

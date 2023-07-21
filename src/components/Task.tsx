@@ -8,6 +8,7 @@ export default function Task({
   task,
   onTaskCheckbox,
   onSubtaskCheckbox,
+  onEditTask,
 }: TaskProps) {
   const [showSubtasks, setShowSubtasks] = useState(false);
 
@@ -15,20 +16,21 @@ export default function Task({
     setShowSubtasks(!showSubtasks);
   }
 
-  const subtasks = task.subtasks?.length && showSubtasks && (
-    <ul className="list-none pl-12">
-      {task.subtasks.map((subtask) => (
-        <Subtask
-          key={subtask.subtaskId}
-          taskId={task.id}
-          subtaskId={subtask.subtaskId}
-          name={subtask.name}
-          done={subtask.done}
-          onSubtaskCheckbox={onSubtaskCheckbox}
-        />
-      ))}
-    </ul>
-  );
+  const subtasks =
+    task.subtasks && task.subtasks?.length > 0 && showSubtasks ? (
+      <ul className="list-none pl-12">
+        {task.subtasks.map((subtask) => (
+          <Subtask
+            key={subtask.subtaskId}
+            taskId={task.id}
+            subtaskId={subtask.subtaskId}
+            name={subtask.name}
+            done={subtask.done}
+            onSubtaskCheckbox={onSubtaskCheckbox}
+          />
+        ))}
+      </ul>
+    ) : null;
 
   return (
     <Card>
@@ -37,9 +39,14 @@ export default function Task({
           id={task.id}
           name={task.name}
           done={task.done}
-          showSubtasks={task.subtasks ? showSubtasks : undefined}
+          showSubtasks={
+            task.subtasks && task.subtasks?.length > 0
+              ? showSubtasks
+              : undefined
+          }
           onToggle={handleToggleSubtasks}
           onCheckbox={onTaskCheckbox}
+          onEditTask={onEditTask}
         />
         {subtasks}
       </li>

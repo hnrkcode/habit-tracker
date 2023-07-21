@@ -5,6 +5,7 @@ export default function Tasks({
   tasks,
   onTaskCheckbox,
   onSubtaskCheckbox,
+  onEditTask,
 }: TasksProps) {
   return (
     <ul>
@@ -14,6 +15,7 @@ export default function Tasks({
           task={task}
           onTaskCheckbox={onTaskCheckbox}
           onSubtaskCheckbox={onSubtaskCheckbox}
+          onEditTask={onEditTask}
         />
       ))}
     </ul>
