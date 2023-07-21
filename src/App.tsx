@@ -31,6 +31,11 @@ export default function App() {
     setShowModal(!showModal);
   }
 
+  function handleDeleteTask(taskId: string) {
+    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
+    setShowModal(!showModal);
+  }
+
   function handleOpenCreateModal() {
     handleModal("create");
   }
@@ -112,6 +117,7 @@ export default function App() {
             taskId={editTaskId}
             tasks={tasks}
             onSave={handleEditTask}
+            onDelete={handleDeleteTask}
             onCancel={() => setShowModal(!showModal)}
           />
         )}

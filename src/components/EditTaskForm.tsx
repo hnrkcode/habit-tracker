@@ -5,6 +5,7 @@ export default function EditTaskForm({
   taskId,
   tasks,
   onSave,
+  onDelete,
   onCancel,
 }: EditTaskFormProps) {
   const [task, setTask] = useState<TaskType>(
@@ -107,6 +108,12 @@ export default function EditTaskForm({
           onClick={() => onSave(task)}
         >
           Save
+        </button>
+        <button
+          className="px-4 py-2 bg-red-500 text-white rounded mr-2"
+          onClick={() => onDelete(taskId)}
+        >
+          Delete
         </button>
         <button
           className="px-4 py-2 bg-white-500 text-black border-solid border-2 border-gray-300 rounded"

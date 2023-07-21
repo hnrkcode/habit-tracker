@@ -80,5 +80,6 @@ export type EditTaskFormProps = {
   taskId: string;
   tasks: TasksType;
   onSave: (task: TaskType) => void;
+  onDelete: (taskId: string) => void;
   onCancel: () => void;
 };
