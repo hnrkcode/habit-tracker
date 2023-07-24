@@ -1,4 +1,4 @@
-import { TaskItemProps } from "../types/common";
+import { TaskItemProps } from "../../types/common";
 import { FaAngleUp, FaAngleDown, FaPen } from "react-icons/fa";
 
 export default function TaskItem({

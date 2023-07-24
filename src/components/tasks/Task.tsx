@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { TaskProps } from "../types/common";
+import { TaskProps } from "../../types/common";
 import TaskItem from "./TaskItem";
-import Card from "./Card";
+import Card from "../Card";
 import Subtask from "./Subtask";
 
 export default function Task({

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Tasks from "./components/Tasks";
+import Tasks from "./components/tasks/Tasks";
 import Navbar from "./components/Navbar";
 import Modal from "./components/Modal";
 import NewTaskForm from "./components/forms/NewTaskForm";

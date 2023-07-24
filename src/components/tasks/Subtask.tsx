@@ -1,4 +1,4 @@
-import { SubtaskProps } from "../types/common";
+import { SubtaskProps } from "../../types/common";
 import SubtaskItem from "./SubtaskItem";
 
 export default function Subtask({
