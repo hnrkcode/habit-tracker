@@ -11,6 +11,19 @@ export default function EditTaskForm({
   const [task, setTask] = useState<TaskType>(
     tasks.filter((task) => task.id === taskId)[0]
   );
+  const [hasErrors, setHasErrors] = useState(false);
+
+  function handleSave() {
+    if (
+      task.name === "" ||
+      task.subtasks?.some((subtask) => subtask.name === "")
+    ) {
+      setHasErrors(true);
+      return;
+    }
+
+    onSave(task);
+  }
 
   function handleAddSubtask() {
     const subtasks = [
@@ -47,6 +60,8 @@ export default function EditTaskForm({
     }
   }
 
+  const emptyFieldError = <p className="text-red-500">Can't be empty</p>;
+
   return (
     <div>
       <h1 className="text-xl font-semibold mb-4">Edit Task</h1>
@@ -63,6 +78,7 @@ export default function EditTaskForm({
             setTask((prevTask) => ({ ...prevTask, name: e.target.value }))
           }
         />
+        {hasErrors && task.name === "" && emptyFieldError}
       </div>
 
       {task.subtasks &&
@@ -91,6 +107,7 @@ export default function EditTaskForm({
                 Delete
               </button>
             </div>
+            {hasErrors && subtask.name === "" && emptyFieldError}
           </div>
         ))}
 
@@ -105,7 +122,7 @@ export default function EditTaskForm({
       <div className="flex justify-center mt-4">
         <button
           className="px-4 py-2 bg-green-500 text-white rounded mr-2"
-          onClick={() => onSave(task)}
+          onClick={handleSave}
         >
           Save
         </button>
