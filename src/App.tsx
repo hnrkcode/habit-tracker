@@ -23,9 +23,12 @@ export default function App() {
   }
 
   function handleEditTask(task: TaskType) {
+    const hasNewSubtask = task.subtasks?.some((subtask) => !subtask.done);
+    const updatedTask = { ...task, done: hasNewSubtask ? false : task.done };
+
     setTasks((prevTasks) =>
       prevTasks.map((prevTask) =>
-        prevTask.id === task.id ? { ...task } : prevTask
+        prevTask.id === task.id ? updatedTask : prevTask
       )
     );
     setShowModal(!showModal);
