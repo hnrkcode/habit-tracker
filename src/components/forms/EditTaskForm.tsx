@@ -1,5 +1,5 @@
 import { useState, ChangeEvent } from "react";
-import { EditTaskFormProps, TaskType } from "../types/common";
+import { EditTaskFormProps, TaskType } from "../../types/common";
 
 export default function EditTaskForm({
   taskId,

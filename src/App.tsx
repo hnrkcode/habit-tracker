@@ -2,8 +2,8 @@ import { useState } from "react";
 import Tasks from "./components/Tasks";
 import Navbar from "./components/Navbar";
 import Modal from "./components/Modal";
-import NewTaskForm from "./components/NewTaskForm";
-import EditTaskForm from "./components/EditTaskForm";
+import NewTaskForm from "./components/forms/NewTaskForm";
+import EditTaskForm from "./components/forms/EditTaskForm";
 import { TaskType } from "./types/common";
 
 export default function App() {

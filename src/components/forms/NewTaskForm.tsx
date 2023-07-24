@@ -1,5 +1,5 @@
 import { useState, ChangeEvent } from "react";
-import { NewTaskFormProps, TaskType } from "../types/common";
+import { NewTaskFormProps, TaskType } from "../../types/common";
 
 export default function NewTaskForm({ onSave, onCancel }: NewTaskFormProps) {
   const [taskName, setTaskName] = useState<string>("");
