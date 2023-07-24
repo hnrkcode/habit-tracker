@@ -1,4 +1,4 @@
-import { useState, WheelEvent } from "react";
+import { useState, WheelEvent, TouchEvent } from "react";
 import dayjs from "dayjs";
 
 export default function Dates() {
@@ -11,6 +11,7 @@ export default function Dates() {
 
   function handleDateClick(index: number) {
     setSelectedDateIndex(index);
+    console.log({ index });
     console.log("currently selected date:", datesArray[index - scrollPosition]);
   }
 
@@ -19,10 +20,39 @@ export default function Dates() {
     setScrollPosition(newScrollPosition);
   }
 
+  function handleTouchScroll(event: TouchEvent) {
+    const touch = event.touches[0];
+    const startX = touch.clientX;
+    let newScrollPosition = scrollPosition;
+
+    function onTouchMove(e: TouchEvent) {
+      const touchMove = e.touches[0];
+      const deltaX = touchMove.clientX - startX;
+      newScrollPosition = scrollPosition - deltaX / 50;
+      setScrollPosition(newScrollPosition);
+    }
+
+    function onTouchEnd() {
+      event.target.removeEventListener(
+        "touchmove",
+        onTouchMove as unknown as EventListener
+      );
+
+      event.target.removeEventListener("touchend", onTouchEnd);
+    }
+
+    event.target.addEventListener("touchend", onTouchEnd);
+    event.target.addEventListener(
+      "touchmove",
+      onTouchMove as unknown as EventListener
+    );
+  }
+
   return (
     <div
       className="flex justify-between overflow-hidden"
       onWheel={handleWheelScroll}
+      onTouchMove={handleTouchScroll}
     >
       {datesArray.map((date, index) => (
         <div
