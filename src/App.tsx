@@ -4,6 +4,7 @@ import Navbar from "./components/Navbar";
 import Modal from "./components/Modal";
 import NewTaskForm from "./components/forms/NewTaskForm";
 import EditTaskForm from "./components/forms/EditTaskForm";
+import Dates from "./components/Dates";
 import { TaskType } from "./types/common";
 
 export default function App() {
@@ -101,6 +102,7 @@ export default function App() {
   return (
     <>
       <Navbar onAddTask={handleOpenCreateModal} />
+      <Dates />
       <h1 className="text-center uppercase font-bold text-2xl">Tasks</h1>
       <Tasks
         tasks={tasks}
