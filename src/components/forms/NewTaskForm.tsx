@@ -4,6 +4,7 @@ import { NewTaskFormProps, TaskType } from "../../types/common";
 export default function NewTaskForm({ onSave, onCancel }: NewTaskFormProps) {
   const [taskName, setTaskName] = useState<string>("");
   const [subtaskNames, setSubtaskNames] = useState<string[]>([]);
+  const [hasErrors, setHasErrors] = useState(false);
 
   function handleTaskNameChange(event: ChangeEvent<HTMLInputElement>) {
     setTaskName(event.target.value);
@@ -29,6 +30,14 @@ export default function NewTaskForm({ onSave, onCancel }: NewTaskFormProps) {
   }
 
   function handleSave() {
+    if (
+      taskName === "" ||
+      subtaskNames.some((subtaskName) => subtaskName === "")
+    ) {
+      setHasErrors(true);
+      return;
+    }
+
     let newTask: TaskType = {
       id: `${crypto.randomUUID()}`,
       name: taskName,
@@ -50,6 +59,8 @@ export default function NewTaskForm({ onSave, onCancel }: NewTaskFormProps) {
     onSave(newTask);
   }
 
+  const emptyFieldError = <p className="text-red-500">Can't be empty</p>;
+
   return (
     <div className="p-4 bg-white rounded shadow">
       <h1 className="text-xl font-semibold mb-4">New Task</h1>
@@ -64,6 +75,7 @@ export default function NewTaskForm({ onSave, onCancel }: NewTaskFormProps) {
           value={taskName}
           onChange={handleTaskNameChange}
         />
+        {hasErrors && taskName === "" && emptyFieldError}
       </div>
       {subtaskNames.length > 0 &&
         subtaskNames.map((subtaskName, index) => (
@@ -90,6 +102,7 @@ export default function NewTaskForm({ onSave, onCancel }: NewTaskFormProps) {
                 Delete
               </button>
             </div>
+            {hasErrors && subtaskName === "" && emptyFieldError}
           </div>
         ))}
       <div className="mb-4 flex justify-center">
