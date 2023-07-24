@@ -4,26 +4,10 @@ import dayjs from "dayjs";
 export default function Dates() {
   const [selectedDateIndex, setSelectedDateIndex] = useState(3);
   const currentDate = dayjs();
-  const allDates = [];
-
-  for (let i = 3; i >= 1; i--) {
-    allDates.push({
-      dayName: currentDate.subtract(i, "day").format("ddd"),
-      date: currentDate.subtract(i, "day").format("MMM D"),
-    });
-  }
-
-  allDates.push({
-    dayName: currentDate.format("ddd"),
-    date: currentDate.format("MMM D"),
-  });
-
-  for (let i = 1; i <= 3; i++) {
-    allDates.push({
-      dayName: currentDate.add(i, "day").format("ddd"),
-      date: currentDate.add(i, "day").format("MMM D"),
-    });
-  }
+  const allDates = Array.from({ length: 7 }, (_, i) => ({
+    dayName: currentDate.add(i - 3, "day").format("ddd"),
+    date: currentDate.add(i - 3, "day").format("MMM D"),
+  }));
 
   function handleDateClick(index: number) {
     setSelectedDateIndex(index);
