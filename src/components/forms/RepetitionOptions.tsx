@@ -1,12 +1,5 @@
-import { Fragment, ChangeEvent } from "react";
-
-type RepetitionOptionsProps = {
-  frequency: string | null;
-  interval: number;
-  onSelectedFrequency: (value: string) => void;
-  onCheckedWeekdays: (event: ChangeEvent<HTMLInputElement>) => void;
-  onUpdatedInterval: (value: number) => void;
-};
+import { Fragment } from "react";
+import { RepetitionOptionsProps } from "../../types/common";
 
 export default function RepetitionOptions({
   frequency,

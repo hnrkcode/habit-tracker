@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, ChangeEvent } from "react";
 
 export type TasksType = TaskType[];
 
@@ -87,4 +87,12 @@ export type EditTaskFormProps = {
 
 export type DatesProps = {
   onSelectDate: (date: string) => void;
+};
+
+export type RepetitionOptionsProps = {
+  frequency: string | null;
+  interval: number;
+  onSelectedFrequency: (value: string) => void;
+  onCheckedWeekdays: (event: ChangeEvent<HTMLInputElement>) => void;
+  onUpdatedInterval: (value: number) => void;
 };
