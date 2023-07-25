@@ -11,8 +11,12 @@ export default function Dates({ onSelectDate }: DatesProps) {
   );
 
   function handleDateClick(index: number) {
-    setSelectedDateIndex(index);
-    onSelectDate(datesArray[index - scrollPosition].format("YYYY-MM-DD"));
+    const selectedDate = datesArray[index - scrollPosition];
+
+    if (selectedDate !== undefined) {
+      setSelectedDateIndex(index);
+      onSelectDate(selectedDate.format("YYYY-MM-DD"));
+    }
   }
 
   function handleWheelScroll(event: WheelEvent) {
