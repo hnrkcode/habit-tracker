@@ -122,7 +122,6 @@ export default function App() {
     <>
       <Navbar onAddTask={handleOpenCreateModal} />
       <DateSlider onSelectDate={setSelectedDate} />
-      <h1 className="text-center uppercase font-bold text-2xl">Tasks</h1>
       <Tasks
         tasks={filteredTasks}
         onTaskCheckbox={handleTaskCheckbox}

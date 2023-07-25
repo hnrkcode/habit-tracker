@@ -8,16 +8,19 @@ export default function Tasks({
   onEditTask,
 }: TasksProps) {
   return (
-    <ul>
-      {tasks.map((task) => (
-        <Task
-          key={task.id}
-          task={task}
-          onTaskCheckbox={onTaskCheckbox}
-          onSubtaskCheckbox={onSubtaskCheckbox}
-          onEditTask={onEditTask}
-        />
-      ))}
-    </ul>
+    <>
+      <h1 className="text-center uppercase font-bold text-2xl">Tasks</h1>
+      <ul>
+        {tasks.map((task) => (
+          <Task
+            key={task.id}
+            task={task}
+            onTaskCheckbox={onTaskCheckbox}
+            onSubtaskCheckbox={onSubtaskCheckbox}
+            onEditTask={onEditTask}
+          />
+        ))}
+      </ul>
+    </>
   );
 }
