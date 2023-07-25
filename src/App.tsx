@@ -8,6 +8,7 @@ import Dates from "./components/Dates";
 import { TaskType } from "./types/common";
 import dayjs from "dayjs";
 import { RRule } from "rrule";
+import initialTasks from "./data.json";
 
 export default function App() {
   const [tasks, setTasks] = useState(initialTasks);
@@ -148,44 +149,3 @@ export default function App() {
     </>
   );
 }
-
-const initialTasks = [
-  {
-    id: "74771701-e411-4ce2-ab9f-2de55bfcefbf",
-    name: "Do this every other day",
-    done: false,
-    rrule: "DTSTART:20230720T000000Z\nRRULE:FREQ=DAILY;INTERVAL=2",
-    subtasks: [
-      {
-        taskId: "74771701-e411-4ce2-ab9f-2de55bfcefbf",
-        subtaskId: "feb714e4-96b0-4874-97ca-a8ea429d9591",
-        name: "Subtask 1",
-        done: false,
-      },
-      {
-        taskId: "74771701-e411-4ce2-ab9f-2de55bfcefbf",
-        subtaskId: "2655a21a-4146-42f5-815e-ad863686c88f",
-        name: "Subtask 2",
-        done: true,
-      },
-      {
-        taskId: "74771701-e411-4ce2-ab9f-2de55bfcefbf",
-        subtaskId: "3d8e4f92-76a4-4b2b-847a-33431085e3bc",
-        name: "Subtask 3",
-        done: false,
-      },
-    ],
-  },
-  {
-    id: "33d7d82a-c260-4f90-ace9-f7785ad555a7",
-    name: "Dayly task",
-    done: false,
-    rrule: "DTSTART:20230701T000000Z\nRRULE:FREQ=DAILY;INTERVAL=1",
-  },
-  {
-    id: "2e83431b-e8f6-48da-9dd4-09aae5133045",
-    name: "Weekly task on Mondays & Wednesdays",
-    done: false,
-    rrule: "DTSTART:20230703T000000Z\nRRULE:FREQ=WEEKLY;BYDAY=MO,WE",
-  },
-];
