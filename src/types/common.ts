@@ -8,6 +8,7 @@ export type TaskType = {
   id: string;
   name: string;
   done: boolean;
+  rrule: string;
   subtasks?: SubtasksType | undefined;
 };
 
@@ -82,4 +83,8 @@ export type EditTaskFormProps = {
   onSave: (task: TaskType) => void;
   onDelete: (taskId: string) => void;
   onCancel: () => void;
+};
+
+export type DatesProps = {
+  onSelectDate: (date: string) => void;
 };

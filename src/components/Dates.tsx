@@ -1,7 +1,8 @@
 import { useState, WheelEvent, TouchEvent } from "react";
+import { DatesProps } from "../types/common";
 import dayjs from "dayjs";
 
-export default function Dates() {
+export default function Dates({ onSelectDate }: DatesProps) {
   const [selectedDateIndex, setSelectedDateIndex] = useState(3);
   const [scrollPosition, setScrollPosition] = useState(0);
   const currentDate = dayjs();
@@ -11,8 +12,7 @@ export default function Dates() {
 
   function handleDateClick(index: number) {
     setSelectedDateIndex(index);
-    console.log({ index });
-    console.log("currently selected date:", datesArray[index - scrollPosition]);
+    onSelectDate(datesArray[index - scrollPosition].format("YYYY-MM-DD"));
   }
 
   function handleWheelScroll(event: WheelEvent) {

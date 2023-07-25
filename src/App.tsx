@@ -6,12 +6,30 @@ import NewTaskForm from "./components/forms/NewTaskForm";
 import EditTaskForm from "./components/forms/EditTaskForm";
 import Dates from "./components/Dates";
 import { TaskType } from "./types/common";
+import dayjs from "dayjs";
+import { RRule } from "rrule";
 
 export default function App() {
   const [tasks, setTasks] = useState(initialTasks);
   const [showModal, setShowModal] = useState(false);
   const [modalAction, setModalAction] = useState("create");
   const [editTaskId, setEditTaskId] = useState("");
+  const [selectedDate, setSelectedDate] = useState(
+    dayjs().format("YYYY-MM-DD")
+  );
+
+  const filteredTasks = tasks.filter((task) => {
+    const rule = RRule.fromString(task.rrule);
+    const pastDate = dayjs(selectedDate).subtract(5, "day").toDate();
+    const futureDate = dayjs(selectedDate).add(5, "day").toDate();
+    const occurrences = rule.between(pastDate, futureDate);
+
+    if (occurrences.some((date) => dayjs(date).isSame(selectedDate, "day"))) {
+      return true;
+    }
+
+    return false;
+  });
 
   function handleModal(action: string) {
     setShowModal(!showModal);
@@ -102,10 +120,10 @@ export default function App() {
   return (
     <>
       <Navbar onAddTask={handleOpenCreateModal} />
-      <Dates />
+      <Dates onSelectDate={setSelectedDate} />
       <h1 className="text-center uppercase font-bold text-2xl">Tasks</h1>
       <Tasks
-        tasks={tasks}
+        tasks={filteredTasks}
         onTaskCheckbox={handleTaskCheckbox}
         onSubtaskCheckbox={handleSubTaskCheckbox}
         onEditTask={handleOpenEditModal}
@@ -134,8 +152,9 @@ export default function App() {
 const initialTasks = [
   {
     id: "74771701-e411-4ce2-ab9f-2de55bfcefbf",
-    name: "Task 1",
+    name: "Do this every other day",
     done: false,
+    rrule: "DTSTART:20230720T000000Z\nRRULE:FREQ=DAILY;INTERVAL=2",
     subtasks: [
       {
         taskId: "74771701-e411-4ce2-ab9f-2de55bfcefbf",
@@ -159,7 +178,14 @@ const initialTasks = [
   },
   {
     id: "33d7d82a-c260-4f90-ace9-f7785ad555a7",
-    name: "Task 2",
+    name: "Dayly task",
     done: false,
+    rrule: "DTSTART:20230701T000000Z\nRRULE:FREQ=DAILY;INTERVAL=1",
+  },
+  {
+    id: "2e83431b-e8f6-48da-9dd4-09aae5133045",
+    name: "Weekly task on Mondays & Wednesdays",
+    done: false,
+    rrule: "DTSTART:20230703T000000Z\nRRULE:FREQ=WEEKLY;BYDAY=MO,WE",
   },
 ];
