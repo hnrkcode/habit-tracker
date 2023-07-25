@@ -1,10 +1,39 @@
 import { useState, ChangeEvent } from "react";
 import { NewTaskFormProps, TaskType } from "../../types/common";
+import RepetitionOptions from "./RepetitionOptions";
+import { RRule, Weekday } from "rrule";
+import dayjs from "dayjs";
 
 export default function NewTaskForm({ onSave, onCancel }: NewTaskFormProps) {
   const [taskName, setTaskName] = useState<string>("");
   const [subtaskNames, setSubtaskNames] = useState<string[]>([]);
   const [hasErrors, setHasErrors] = useState(false);
+  const [frequency, setFrequency] = useState<string | null>(null);
+  const [interval, setInterval] = useState<number>(1);
+  const [weekdays, setWeekdays] = useState<string[]>([]);
+
+  function handleSelectedFrequency(value: string) {
+    setFrequency(value);
+  }
+
+  function handleCheckedWeekdays(event: ChangeEvent<HTMLInputElement>) {
+    const { value, checked } = event.target;
+    if (checked) {
+      // Add the checked day to the byWeekday state if it's not already there
+      if (!weekdays.includes(value)) {
+        setWeekdays((prevByWeekday) => [...prevByWeekday, value]);
+      }
+    } else {
+      // Remove the unchecked day from the byWeekday state
+      setWeekdays((prevByWeekday) =>
+        prevByWeekday.filter((day) => day !== value)
+      );
+    }
+  }
+
+  function handleUpdatedInterval(value: number) {
+    setInterval(value);
+  }
 
   function handleTaskNameChange(event: ChangeEvent<HTMLInputElement>) {
     setTaskName(event.target.value);
@@ -32,16 +61,36 @@ export default function NewTaskForm({ onSave, onCancel }: NewTaskFormProps) {
   function handleSave() {
     if (
       taskName === "" ||
+      frequency === null ||
+      (frequency === "weekly" && weekdays.length === 0) ||
       subtaskNames.some((subtaskName) => subtaskName === "")
     ) {
       setHasErrors(true);
       return;
     }
 
+    const weekdayMapping: { [key: string]: Weekday } = {
+      MO: RRule.MO,
+      TU: RRule.TU,
+      WE: RRule.WE,
+      TH: RRule.TH,
+      FR: RRule.FR,
+      SA: RRule.SA,
+      SU: RRule.SU,
+    };
+
+    const rule = new RRule({
+      freq: frequency === "daily" ? RRule.DAILY : RRule.WEEKLY,
+      interval: interval,
+      byweekday: weekdays.map((weekday) => weekdayMapping[weekday]),
+      dtstart: dayjs().toDate(),
+    });
+
     let newTask: TaskType = {
       id: `${crypto.randomUUID()}`,
       name: taskName,
       done: false,
+      rrule: rule.toString(),
     };
 
     if (subtaskNames.length > 0) {
@@ -113,6 +162,13 @@ export default function NewTaskForm({ onSave, onCancel }: NewTaskFormProps) {
           Add Subtask
         </button>
       </div>
+      <RepetitionOptions
+        frequency={frequency}
+        interval={interval}
+        onSelectedFrequency={handleSelectedFrequency}
+        onCheckedWeekdays={handleCheckedWeekdays}
+        onUpdatedInterval={handleUpdatedInterval}
+      />
       <div className="flex justify-center mt-4">
         <button
           className="px-4 py-2 bg-green-500 text-white rounded mr-2"
