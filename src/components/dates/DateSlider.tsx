@@ -60,9 +60,9 @@ export default function DateSlider({ onSelectDate }: DateSliderProps) {
     >
       {datesArray.map((date, index) => (
         <div
-          className={`select-none cursor-pointer p-1 m-1 ${
+          className={`select-none cursor-pointer p-1 m-1${
             selectedDateIndex === index + scrollPosition
-              ? "border-sky-500 border-2 rounded-lg"
+              ? " border-sky-500 border-2 rounded-lg"
               : ""
           }`}
           key={index + scrollPosition}
