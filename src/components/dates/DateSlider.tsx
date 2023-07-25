@@ -1,5 +1,6 @@
 import { useState, WheelEvent, TouchEvent } from "react";
 import { DateSliderProps } from "../../types/common";
+import DateItem from "./DateItem";
 import dayjs from "dayjs";
 
 export default function DateSlider({ onSelectDate }: DateSliderProps) {
@@ -67,11 +68,7 @@ export default function DateSlider({ onSelectDate }: DateSliderProps) {
           key={index + scrollPosition}
           onClick={() => handleDateClick(index + scrollPosition)}
         >
-          <div className="text-center text-lg font-bold">
-            {date.format("ddd")}
-          </div>
-          <div className="text-center">{date.format("MMM")}</div>
-          <div className="text-center">{date.format("D")}</div>
+          <DateItem date={date} />
         </div>
       ))}
     </div>

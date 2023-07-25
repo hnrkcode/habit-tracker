@@ -1,4 +1,5 @@
 import { ReactNode, ChangeEvent } from "react";
+import dayjs from "dayjs";
 
 export type TasksType = TaskType[];
 
@@ -95,4 +96,8 @@ export type RepetitionOptionsProps = {
   onSelectedFrequency: (value: string) => void;
   onCheckedWeekdays: (event: ChangeEvent<HTMLInputElement>) => void;
   onUpdatedInterval: (value: number) => void;
+};
+
+export type DateItemProps = {
+  date: dayjs.Dayjs;
 };
