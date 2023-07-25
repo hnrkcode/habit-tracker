@@ -85,7 +85,7 @@ export type EditTaskFormProps = {
   onCancel: () => void;
 };
 
-export type DatesProps = {
+export type DateSliderProps = {
   onSelectDate: (date: string) => void;
 };
 

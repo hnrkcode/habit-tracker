@@ -1,8 +1,8 @@
 import { useState, WheelEvent, TouchEvent } from "react";
-import { DatesProps } from "../types/common";
+import { DateSliderProps } from "../../types/common";
 import dayjs from "dayjs";
 
-export default function Dates({ onSelectDate }: DatesProps) {
+export default function DateSlider({ onSelectDate }: DateSliderProps) {
   const [selectedDateIndex, setSelectedDateIndex] = useState(3);
   const [scrollPosition, setScrollPosition] = useState(0);
   const currentDate = dayjs();

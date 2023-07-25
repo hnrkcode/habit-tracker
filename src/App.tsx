@@ -4,7 +4,7 @@ import Navbar from "./components/Navbar";
 import Modal from "./components/Modal";
 import NewTaskForm from "./components/forms/NewTaskForm";
 import EditTaskForm from "./components/forms/EditTaskForm";
-import Dates from "./components/Dates";
+import DateSlider from "./components/dates/DateSlider";
 import { TaskType } from "./types/common";
 import dayjs from "dayjs";
 import { RRule } from "rrule";
@@ -121,7 +121,7 @@ export default function App() {
   return (
     <>
       <Navbar onAddTask={handleOpenCreateModal} />
-      <Dates onSelectDate={setSelectedDate} />
+      <DateSlider onSelectDate={setSelectedDate} />
       <h1 className="text-center uppercase font-bold text-2xl">Tasks</h1>
       <Tasks
         tasks={filteredTasks}
