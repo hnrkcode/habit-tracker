@@ -4,6 +4,7 @@ import Subtask from "./Subtask";
 export default function Subtasks({
   taskId,
   subtasks,
+  selectedDate,
   onSubtaskCheckbox,
 }: SubtasksProps) {
   return (
@@ -14,7 +15,7 @@ export default function Subtasks({
           taskId={taskId}
           subtaskId={subtask.subtaskId}
           name={subtask.name}
-          done={subtask.done}
+          done={subtask.done.includes(selectedDate)}
           onSubtaskCheckbox={onSubtaskCheckbox}
         />
       ))}

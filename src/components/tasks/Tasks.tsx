@@ -3,6 +3,7 @@ import { TasksProps } from "../../types/common";
 
 export default function Tasks({
   tasks,
+  selectedDate,
   onTaskCheckbox,
   onSubtaskCheckbox,
   onEditTask,
@@ -15,6 +16,7 @@ export default function Tasks({
           <Task
             key={task.id}
             task={task}
+            selectedDate={selectedDate}
             onTaskCheckbox={onTaskCheckbox}
             onSubtaskCheckbox={onSubtaskCheckbox}
             onEditTask={onEditTask}

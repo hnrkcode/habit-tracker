@@ -8,7 +8,7 @@ export type SubtasksType = SubtaskType[];
 export type TaskType = {
   id: string;
   name: string;
-  done: boolean;
+  done: string[];
   rrule: string;
   subtasks?: SubtasksType | undefined;
 };
@@ -17,7 +17,7 @@ export type SubtaskType = {
   taskId: string;
   subtaskId: string;
   name: string;
-  done: boolean;
+  done: string[];
 };
 
 export type CardProps = {
@@ -35,11 +35,13 @@ export type SubtaskProps = {
 export type SubtasksProps = {
   taskId: string;
   subtasks: SubtasksType;
+  selectedDate: string;
   onSubtaskCheckbox: (taskId: string, subtaskId: string) => void;
 };
 
 export type TaskProps = {
   task: TaskType;
+  selectedDate: string;
   onTaskCheckbox: (id: string) => void;
   onSubtaskCheckbox: (taskId: string, subtaskId: string) => void;
   onEditTask: (id: string) => void;
@@ -47,6 +49,7 @@ export type TaskProps = {
 
 export type TasksProps = {
   tasks: TasksType;
+  selectedDate: string;
   onTaskCheckbox: (id: string) => void;
   onSubtaskCheckbox: (taskId: string, subtaskId: string) => void;
   onEditTask: (id: string) => void;

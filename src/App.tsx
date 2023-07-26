@@ -5,13 +5,13 @@ import Modal from "./components/Modal";
 import NewTaskForm from "./components/forms/NewTaskForm";
 import EditTaskForm from "./components/forms/EditTaskForm";
 import DateSlider from "./components/dates/DateSlider";
-import { TaskType } from "./types/common";
+import { TaskType, TasksType } from "./types/common";
 import dayjs from "dayjs";
 import { RRule } from "rrule";
 import initialTasks from "./data.json";
 
 export default function App() {
-  const [tasks, setTasks] = useState(initialTasks);
+  const [tasks, setTasks] = useState<TasksType>(initialTasks);
   const [showModal, setShowModal] = useState(false);
   const [modalAction, setModalAction] = useState("create");
   const [editTaskId, setEditTaskId] = useState("");
@@ -43,14 +43,18 @@ export default function App() {
   }
 
   function handleEditTask(task: TaskType) {
-    const hasNewSubtask = task.subtasks?.some((subtask) => !subtask.done);
-    const updatedTask = { ...task, done: hasNewSubtask ? false : task.done };
+    const hasNewSubtask = task.subtasks?.some(
+      (subtask) => !subtask.done.includes(selectedDate)
+    );
+
+    const updatedTask = { ...task, done: hasNewSubtask ? [] : [...task.done] };
 
     setTasks((prevTasks) =>
       prevTasks.map((prevTask) =>
         prevTask.id === task.id ? updatedTask : prevTask
       )
     );
+
     setShowModal(!showModal);
   }
 
@@ -76,13 +80,26 @@ export default function App() {
     setTasks((prevTasks) =>
       prevTasks.map((task) => {
         if (task.id === id) {
-          const updatedTask = { ...task, done: !task.done };
+          // Check or uncheck the main task for the selected date.
+          const isDateSelected = task.done.includes(selectedDate);
+          const updatedTask = {
+            ...task,
+            done: isDateSelected
+              ? task.done.filter((date) => date !== selectedDate)
+              : [...task.done, selectedDate],
+          };
 
+          // Check or uncheck all subtasks for the selected date.
           if (task.subtasks) {
-            updatedTask.subtasks = task.subtasks.map((subtask) => ({
-              ...subtask,
-              done: !task.done,
-            }));
+            updatedTask.subtasks = task.subtasks.map((subtask) => {
+              const subtaskDone = isDateSelected
+                ? subtask.done.filter((date) => date !== selectedDate)
+                : [...new Set([...subtask.done, selectedDate])];
+              return {
+                ...subtask,
+                done: subtaskDone,
+              };
+            });
           }
 
           return updatedTask;
@@ -98,25 +115,31 @@ export default function App() {
       prevTasks.map((task) => {
         if (task.id === taskId) {
           const updatedTask = { ...task };
-
           if (task.subtasks) {
-            updatedTask.subtasks = task.subtasks.map((subtask) =>
-              subtask.subtaskId === subtaskId
-                ? {
-                    ...subtask,
-                    done: !subtask.done,
-                  }
-                : subtask
+            updatedTask.subtasks = task.subtasks.map((subtask) => {
+              if (subtask.subtaskId === subtaskId) {
+                const subtaskDone = subtask.done.includes(selectedDate)
+                  ? subtask.done.filter((date) => date !== selectedDate)
+                  : [...subtask.done, selectedDate];
+                return {
+                  ...subtask,
+                  done: subtaskDone,
+                };
+              }
+              return subtask;
+            });
+
+            // Check if all subtasks are checked and update the main task state accordingly.
+            const allSubtasksChecked = updatedTask.subtasks.every((subtask) =>
+              subtask.done.includes(selectedDate)
             );
 
-            updatedTask.done = updatedTask.subtasks.every(
-              (subtask) => subtask.done
-            );
+            updatedTask.done = allSubtasksChecked
+              ? [...new Set([...updatedTask.done, selectedDate])]
+              : updatedTask.done.filter((date) => date !== selectedDate);
           }
-
           return updatedTask;
         }
-
         return task;
       })
     );
@@ -128,6 +151,7 @@ export default function App() {
       <DateSlider onSelectDate={setSelectedDate} />
       <Tasks
         tasks={filteredTasks}
+        selectedDate={selectedDate}
         onTaskCheckbox={handleTaskCheckbox}
         onSubtaskCheckbox={handleSubTaskCheckbox}
         onEditTask={handleOpenEditModal}

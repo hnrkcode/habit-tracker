@@ -37,7 +37,7 @@ export default function EditTaskForm({
         taskId: task.id,
         subtaskId: `${crypto.randomUUID()}`,
         name: "",
-        done: false,
+        done: [],
       },
     ];
 

@@ -94,7 +94,7 @@ export default function NewTaskForm({ onSave, onCancel }: NewTaskFormProps) {
     let newTask: TaskType = {
       id: `${crypto.randomUUID()}`,
       name: taskName,
-      done: false,
+      done: [],
       rrule: rule.toString(),
     };
 
@@ -105,7 +105,7 @@ export default function NewTaskForm({ onSave, onCancel }: NewTaskFormProps) {
           taskId: newTask.id,
           subtaskId: `${crypto.randomUUID()}`,
           name: subtaskName,
-          done: false,
+          done: [],
         })),
       };
     }

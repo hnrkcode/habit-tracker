@@ -6,6 +6,7 @@ import Subtasks from "./Subtasks";
 
 export default function Task({
   task,
+  selectedDate,
   onTaskCheckbox,
   onSubtaskCheckbox,
   onEditTask,
@@ -23,7 +24,7 @@ export default function Task({
         <TaskItem
           id={task.id}
           name={task.name}
-          done={task.done}
+          done={task.done.includes(selectedDate)}
           hasSubtasks={hasSubtasks}
           showSubtasks={showSubtasks}
           onToggle={handleToggleSubtasks}
@@ -33,6 +34,7 @@ export default function Task({
         {task.subtasks !== undefined && showSubtasks && (
           <Subtasks
             taskId={task.id}
+            selectedDate={selectedDate}
             subtasks={task.subtasks}
             onSubtaskCheckbox={onSubtaskCheckbox}
           />
