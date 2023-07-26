@@ -8,7 +8,7 @@ export default function Modal({ isOpen, onClose, children }: ModalProps) {
           className="absolute inset-0 bg-gray-800 opacity-75"
           onClick={onClose}
         ></div>
-        <div className="bg-white rounded-lg p-8 z-10 max-h-[80vh] overflow-auto">
+        <div className="bg-white rounded-lg p-8 z-10 w-full max-h-[80vh] overflow-auto">
           {children}
         </div>
       </div>

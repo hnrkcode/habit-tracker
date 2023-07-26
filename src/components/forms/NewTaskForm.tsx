@@ -116,7 +116,7 @@ export default function NewTaskForm({ onSave, onCancel }: NewTaskFormProps) {
   const emptyFieldError = <p className="text-red-500">Can't be empty</p>;
 
   return (
-    <div className="p-4 bg-white rounded shadow">
+    <div>
       <h1 className="text-xl font-semibold mb-4">New Task</h1>
       <div className="mb-4">
         <label htmlFor="taskName" className="block font-medium mb-1">
