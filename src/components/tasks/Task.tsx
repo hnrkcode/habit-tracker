@@ -16,16 +16,6 @@ export default function Task({
     setShowSubtasks(!showSubtasks);
   }
 
-  const subtasks = task.subtasks &&
-    task.subtasks?.length > 0 &&
-    showSubtasks && (
-      <Subtasks
-        taskId={task.id}
-        subtasks={task.subtasks}
-        onSubtaskCheckbox={onSubtaskCheckbox}
-      />
-    );
-
   return (
     <Card>
       <li>
@@ -42,7 +32,13 @@ export default function Task({
           onCheckbox={onTaskCheckbox}
           onEditTask={onEditTask}
         />
-        {subtasks}
+        {task.subtasks !== undefined && showSubtasks && (
+          <Subtasks
+            taskId={task.id}
+            subtasks={task.subtasks}
+            onSubtaskCheckbox={onSubtaskCheckbox}
+          />
+        )}
       </li>
     </Card>
   );
