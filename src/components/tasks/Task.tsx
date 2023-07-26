@@ -11,6 +11,7 @@ export default function Task({
   onEditTask,
 }: TaskProps) {
   const [showSubtasks, setShowSubtasks] = useState(false);
+  const hasSubtasks = task.subtasks !== undefined;
 
   function handleToggleSubtasks() {
     setShowSubtasks(!showSubtasks);
@@ -23,11 +24,8 @@ export default function Task({
           id={task.id}
           name={task.name}
           done={task.done}
-          showSubtasks={
-            task.subtasks && task.subtasks?.length > 0
-              ? showSubtasks
-              : undefined
-          }
+          hasSubtasks={hasSubtasks}
+          showSubtasks={showSubtasks}
           onToggle={handleToggleSubtasks}
           onCheckbox={onTaskCheckbox}
           onEditTask={onEditTask}

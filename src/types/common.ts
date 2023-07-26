@@ -56,6 +56,7 @@ export type TaskItemProps = {
   id: string;
   name: string;
   done: boolean;
+  hasSubtasks: boolean;
   showSubtasks?: boolean | undefined;
   onToggle?: () => void | undefined;
   onCheckbox?: (id: string) => void | undefined;

@@ -5,6 +5,7 @@ export default function TaskItem({
   id,
   name,
   done,
+  hasSubtasks,
   showSubtasks,
   onToggle,
   onCheckbox,
@@ -25,7 +26,7 @@ export default function TaskItem({
         <FaPen onClick={() => onEditTask(id)} />
       </div>
 
-      {showSubtasks !== undefined && (
+      {hasSubtasks && (
         <div onClick={onToggle} className="flex justify-center items-center">
           {toggleSubTasksBtn}
         </div>
