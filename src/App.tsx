@@ -68,6 +68,10 @@ export default function App() {
     setEditTaskId(id);
   }
 
+  function handleCloseModal() {
+    setShowModal(!showModal);
+  }
+
   function handleTaskCheckbox(id: string) {
     setTasks((prevTasks) =>
       prevTasks.map((task) => {
@@ -128,12 +132,9 @@ export default function App() {
         onSubtaskCheckbox={handleSubTaskCheckbox}
         onEditTask={handleOpenEditModal}
       />
-      <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
+      <Modal isOpen={showModal} onClose={handleCloseModal}>
         {modalAction === "create" && (
-          <NewTaskForm
-            onSave={handleCreateTask}
-            onCancel={() => setShowModal(!showModal)}
-          />
+          <NewTaskForm onSave={handleCreateTask} onCancel={handleCloseModal} />
         )}
         {modalAction === "edit" && (
           <EditTaskForm
@@ -141,7 +142,7 @@ export default function App() {
             tasks={tasks}
             onSave={handleEditTask}
             onDelete={handleDeleteTask}
-            onCancel={() => setShowModal(!showModal)}
+            onCancel={handleCloseModal}
           />
         )}
       </Modal>
