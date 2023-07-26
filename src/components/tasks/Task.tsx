@@ -13,7 +13,7 @@ export default function Task({
   onEditTask,
 }: TaskProps) {
   const [showSubtasks, setShowSubtasks] = useState(false);
-  const hasSubtasks = task.subtasks !== undefined;
+  const hasSubtasks = task.subtasks !== undefined && task.subtasks.length > 0;
 
   function handleToggleSubtasks() {
     setShowSubtasks(!showSubtasks);
