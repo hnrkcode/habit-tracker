@@ -2,7 +2,7 @@ import { useState } from "react";
 import { TaskProps } from "../../types/common";
 import TaskItem from "./TaskItem";
 import Card from "../Card";
-import Subtask from "./Subtask";
+import Subtasks from "./Subtasks";
 
 export default function Task({
   task,
@@ -16,21 +16,15 @@ export default function Task({
     setShowSubtasks(!showSubtasks);
   }
 
-  const subtasks =
-    task.subtasks && task.subtasks?.length > 0 && showSubtasks ? (
-      <ul className="list-none pl-12">
-        {task.subtasks.map((subtask) => (
-          <Subtask
-            key={subtask.subtaskId}
-            taskId={task.id}
-            subtaskId={subtask.subtaskId}
-            name={subtask.name}
-            done={subtask.done}
-            onSubtaskCheckbox={onSubtaskCheckbox}
-          />
-        ))}
-      </ul>
-    ) : null;
+  const subtasks = task.subtasks &&
+    task.subtasks?.length > 0 &&
+    showSubtasks && (
+      <Subtasks
+        taskId={task.id}
+        subtasks={task.subtasks}
+        onSubtaskCheckbox={onSubtaskCheckbox}
+      />
+    );
 
   return (
     <Card>
