@@ -11,12 +11,9 @@ export default function Subtask({
   return (
     <li>
       <SubtaskItem
-        id={subtaskId}
         name={name}
         done={done}
-        onCheckbox={() =>
-          onSubtaskCheckbox && onSubtaskCheckbox(taskId, subtaskId)
-        }
+        onCheckbox={() => onSubtaskCheckbox(taskId, subtaskId)}
       />
     </li>
   );

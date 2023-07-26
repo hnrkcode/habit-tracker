@@ -29,13 +29,13 @@ export type SubtaskProps = {
   subtaskId: string;
   name: string;
   done: boolean;
-  onSubtaskCheckbox?: (taskId: string, subtaskId: string) => void;
+  onSubtaskCheckbox: (taskId: string, subtaskId: string) => void;
 };
 
 export type SubtasksProps = {
   taskId: string;
   subtasks: SubtasksType;
-  onSubtaskCheckbox?: (taskId: string, subtaskId: string) => void;
+  onSubtaskCheckbox: (taskId: string, subtaskId: string) => void;
 };
 
 export type TaskProps = {
@@ -64,10 +64,9 @@ export type TaskItemProps = {
 };
 
 export type SubtaskItemProps = {
-  id: string;
   name: string;
   done: boolean;
-  onCheckbox: (id: string) => void;
+  onCheckbox: () => void;
 };
 
 export type NavbarProps = {

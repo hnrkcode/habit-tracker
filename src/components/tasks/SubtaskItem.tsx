@@ -1,7 +1,6 @@
 import { SubtaskItemProps } from "../../types/common";
 
 export default function SubtaskItem({
-  id,
   name,
   done,
   onCheckbox,
@@ -13,7 +12,7 @@ export default function SubtaskItem({
           type="checkbox"
           className="mr-2"
           checked={done}
-          onChange={() => onCheckbox(id)}
+          onChange={onCheckbox}
         />
         <span className="mr-2">{name}</span>
       </div>
