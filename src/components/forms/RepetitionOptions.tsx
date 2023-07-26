@@ -1,5 +1,6 @@
 import { RepetitionOptionsProps } from "../../types/common";
 import FrequencyOption from "./FrequencyOption";
+import IntervalOption from "./IntervalOption";
 
 export default function RepetitionOptions({
   frequency,
@@ -24,36 +25,12 @@ export default function RepetitionOptions({
       <FrequencyOption onChange={(e) => onSelectedFrequency(e.target.value)} />
       {frequency !== null && (
         <>
-          <div>
-            <label htmlFor="interval" className="block font-medium mb-1">
-              Interval:
-            </label>
-            <div className="flex rounded-md shadow-sm">
-              <button
-                type="button"
-                onClick={() => onUpdatedInterval(interval - 1)}
-                className="px-3 py-2 border border-gray-300 rounded-l-md text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-              >
-                -
-              </button>
-              <input
-                type="number"
-                id="interval"
-                name="interval"
-                value={interval}
-                onChange={(e) => onUpdatedInterval(Number(e.target.value))}
-                min="1"
-                className="w-1/5 border-y border-gray-300 px-3 py-2"
-              />
-              <button
-                type="button"
-                onClick={() => onUpdatedInterval(interval + 1)}
-                className="px-3 py-2 border border-gray-300 rounded-r-md text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-              >
-                +
-              </button>
-            </div>
-          </div>
+          <IntervalOption
+            interval={interval}
+            onDecrement={() => onUpdatedInterval(interval - 1)}
+            onIncrement={() => onUpdatedInterval(interval + 1)}
+            onChange={(event) => onUpdatedInterval(Number(event.target.value))}
+          />
           {frequency === "weekly" && (
             <div>
               <label htmlFor="weekdays" className="block font-medium mb-1">
