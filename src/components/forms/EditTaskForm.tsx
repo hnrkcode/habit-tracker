@@ -4,6 +4,7 @@ import SaveButton from "../buttons/SaveButton";
 import CancelButton from "../buttons/CancelButton";
 import DeleteButton from "../buttons/DeleteButton";
 import AddSubtaskButton from "../buttons/AddSubtaskButton";
+import TextInput from "../inputs/TextInput";
 
 export default function EditTaskForm({
   taskId,
@@ -73,13 +74,11 @@ export default function EditTaskForm({
         <label htmlFor="taskName" className="block font-medium mb-1">
           Task Name:
         </label>
-        <input
-          type="text"
-          id="taskName"
-          className="w-full border border-gray-300 rounded px-3 py-2"
+        <TextInput
+          id={"taskName"}
           value={task.name}
-          onChange={(e) =>
-            setTask((prevTask) => ({ ...prevTask, name: e.target.value }))
+          onChange={(event) =>
+            setTask((prevTask) => ({ ...prevTask, name: event.target.value }))
           }
         />
         {hasErrors && task.name === "" && emptyFieldError}
@@ -95,11 +94,9 @@ export default function EditTaskForm({
             >
               Subtask {index + 1}:
             </label>
-            <div className="flex">
-              <input
-                type="text"
+            <div className="flex gap-x-1">
+              <TextInput
                 id={`subtaskName-${index}`}
-                className="w-full border border-gray-300 rounded px-3 py-2 mr-2 "
                 value={subtask.name}
                 onChange={(event) => handleSubtaskNameChange(index, event)}
               />

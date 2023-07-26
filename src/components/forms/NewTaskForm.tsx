@@ -7,6 +7,7 @@ import AddSubtaskButton from "../buttons/AddSubtaskButton";
 import { RRule, Weekday } from "rrule";
 import dayjs from "dayjs";
 import DeleteButton from "../buttons/DeleteButton";
+import TextInput from "../inputs/TextInput";
 
 export default function NewTaskForm({ onSave, onCancel }: NewTaskFormProps) {
   const [taskName, setTaskName] = useState<string>("");
@@ -121,10 +122,8 @@ export default function NewTaskForm({ onSave, onCancel }: NewTaskFormProps) {
         <label htmlFor="taskName" className="block font-medium mb-1">
           Task Name:
         </label>
-        <input
-          type="text"
-          id="taskName"
-          className="w-full border border-gray-300 rounded px-3 py-2"
+        <TextInput
+          id={"taskName"}
           value={taskName}
           onChange={handleTaskNameChange}
         />
@@ -139,11 +138,9 @@ export default function NewTaskForm({ onSave, onCancel }: NewTaskFormProps) {
             >
               Subtask {index + 1}:
             </label>
-            <div className="flex">
-              <input
-                type="text"
+            <div className="flex gap-x-1">
+              <TextInput
                 id={`subtaskName-${index}`}
-                className="w-full border border-gray-300 rounded px-3 py-2 mr-2"
                 value={subtaskName}
                 onChange={(event) => handleSubtaskNameChange(index, event)}
               />
