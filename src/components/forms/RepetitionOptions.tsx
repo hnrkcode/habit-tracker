@@ -1,5 +1,5 @@
-import { Fragment } from "react";
 import { RepetitionOptionsProps } from "../../types/common";
+import FrequencyOption from "./FrequencyOption";
 
 export default function RepetitionOptions({
   frequency,
@@ -8,10 +8,6 @@ export default function RepetitionOptions({
   onCheckedWeekdays,
   onUpdatedInterval,
 }: RepetitionOptionsProps) {
-  const frequencyOptions = [
-    { id: "daily", value: "daily", label: "Daily" },
-    { id: "weekly", value: "weekly", label: "Weekly" },
-  ];
   const byWeekdayOptions = [
     { id: "monday", value: "MO", label: "Mon" },
     { id: "tuesday", value: "TU", label: "Tue" },
@@ -25,23 +21,7 @@ export default function RepetitionOptions({
   return (
     <>
       <h1 className="text-l font-semibold mb-4">Task Repetition</h1>
-      <div className="flex items-center space-x-2">
-        {frequencyOptions.map((option) => (
-          <Fragment key={option.id}>
-            <input
-              type="radio"
-              id={option.id}
-              name="repetition"
-              value={option.value}
-              className="text-indigo-600 h-5 w-5"
-              onChange={(e) => onSelectedFrequency(e.target.value)}
-            />
-            <label htmlFor={option.id} className="block font-medium mb-1">
-              {option.label}
-            </label>
-          </Fragment>
-        ))}
-      </div>
+      <FrequencyOption onChange={(e) => onSelectedFrequency(e.target.value)} />
       {frequency !== null && (
         <>
           <div>
