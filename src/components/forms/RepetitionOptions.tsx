@@ -1,6 +1,8 @@
+import { ChangeEvent } from "react";
 import { RepetitionOptionsProps } from "../../types/common";
 import FrequencyOption from "./FrequencyOption";
 import IntervalOption from "./IntervalOption";
+import WeekdaysOption from "./WeekdaysOption";
 
 export default function RepetitionOptions({
   frequency,
@@ -9,56 +11,36 @@ export default function RepetitionOptions({
   onCheckedWeekdays,
   onUpdatedInterval,
 }: RepetitionOptionsProps) {
-  const byWeekdayOptions = [
-    { id: "monday", value: "MO", label: "Mon" },
-    { id: "tuesday", value: "TU", label: "Tue" },
-    { id: "wednesday", value: "WE", label: "Wed" },
-    { id: "thursday", value: "TH", label: "Thu" },
-    { id: "friday", value: "FR", label: "Fri" },
-    { id: "saturday", value: "SA", label: "Sat" },
-    { id: "sunday", value: "SU", label: "Sun" },
-  ];
+  function handleFrequencyChange(event: ChangeEvent<HTMLInputElement>) {
+    onSelectedFrequency(event.target.value);
+  }
+
+  function handleIntervalChange(event: ChangeEvent<HTMLInputElement>) {
+    onUpdatedInterval(Number(event.target.value));
+  }
+
+  function handleDecrementInterval() {
+    onUpdatedInterval(interval - 1);
+  }
+
+  function handleIncrementInterval() {
+    onUpdatedInterval(interval + 1);
+  }
 
   return (
     <>
       <h1 className="text-l font-semibold mb-4">Task Repetition</h1>
-      <FrequencyOption onChange={(e) => onSelectedFrequency(e.target.value)} />
+      <FrequencyOption onChange={handleFrequencyChange} />
       {frequency !== null && (
         <>
           <IntervalOption
             interval={interval}
-            onDecrement={() => onUpdatedInterval(interval - 1)}
-            onIncrement={() => onUpdatedInterval(interval + 1)}
-            onChange={(event) => onUpdatedInterval(Number(event.target.value))}
+            onDecrement={handleDecrementInterval}
+            onIncrement={handleIncrementInterval}
+            onChange={handleIntervalChange}
           />
           {frequency === "weekly" && (
-            <div>
-              <label htmlFor="weekdays" className="block font-medium mb-1">
-                Weekdays:
-              </label>
-
-              <div className="flex flex-wrap justify-start">
-                {byWeekdayOptions.map((option) => (
-                  <label
-                    key={option.id}
-                    htmlFor={option.id}
-                    className="flex items-center mr-4 mb-4"
-                  >
-                    <input
-                      type="checkbox"
-                      id={option.id}
-                      name="weekdays"
-                      value={option.value}
-                      className="h-5 w-5 text-indigo-600 mr-2"
-                      onChange={onCheckedWeekdays}
-                    />
-                    <span className="text-gray-800 font-medium">
-                      {option.label}
-                    </span>
-                  </label>
-                ))}
-              </div>
-            </div>
+            <WeekdaysOption onChange={onCheckedWeekdays} />
           )}
         </>
       )}
