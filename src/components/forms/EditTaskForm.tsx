@@ -1,5 +1,9 @@
 import { useState, ChangeEvent } from "react";
 import { EditTaskFormProps, TaskType } from "../../types/common";
+import SaveButton from "../buttons/SaveButton";
+import CancelButton from "../buttons/CancelButton";
+import DeleteButton from "../buttons/DeleteButton";
+import AddSubtaskButton from "../buttons/AddSubtaskButton";
 
 export default function EditTaskForm({
   taskId,
@@ -95,49 +99,23 @@ export default function EditTaskForm({
               <input
                 type="text"
                 id={`subtaskName-${index}`}
-                className="w-full border border-gray-300 rounded px-3 py-2"
+                className="w-full border border-gray-300 rounded px-3 py-2 mr-2 "
                 value={subtask.name}
                 onChange={(event) => handleSubtaskNameChange(index, event)}
               />
-
-              <button
-                className="ml-2 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-                onClick={() => handleRemoveSubtask(index)}
-              >
-                Delete
-              </button>
+              <DeleteButton onDelete={() => handleRemoveSubtask(index)} />
             </div>
             {hasErrors && subtask.name === "" && emptyFieldError}
           </div>
         ))}
 
       <div className="mb-4 flex justify-center">
-        <button
-          className="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-          onClick={handleAddSubtask}
-        >
-          Add Subtask
-        </button>
+        <AddSubtaskButton onAddSubtask={handleAddSubtask} />
       </div>
-      <div className="flex justify-center mt-4">
-        <button
-          className="px-4 py-2 bg-green-500 text-white rounded mr-2"
-          onClick={handleSave}
-        >
-          Save
-        </button>
-        <button
-          className="px-4 py-2 bg-red-500 text-white rounded mr-2"
-          onClick={() => onDelete(taskId)}
-        >
-          Delete
-        </button>
-        <button
-          className="px-4 py-2 bg-white-500 text-black border-solid border-2 border-gray-300 rounded"
-          onClick={onCancel}
-        >
-          Cancel
-        </button>
+      <div className="flex justify-center mt-4 gap-x-1">
+        <SaveButton onSave={handleSave} />
+        <DeleteButton onDelete={() => onDelete(taskId)} />
+        <CancelButton onCancel={onCancel} />
       </div>
     </div>
   );
