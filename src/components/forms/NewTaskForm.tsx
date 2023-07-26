@@ -1,13 +1,14 @@
-import { useState, ChangeEvent } from "react";
-import { NewTaskFormProps, TaskType } from "../../types/common";
-import RepetitionOptions from "./RepetitionOptions";
-import SaveButton from "../buttons/SaveButton";
-import CancelButton from "../buttons/CancelButton";
-import AddSubtaskButton from "../buttons/AddSubtaskButton";
-import { RRule, Weekday } from "rrule";
 import dayjs from "dayjs";
+import { ChangeEvent, useState } from "react";
+import { RRule, Weekday } from "rrule";
+
+import { NewTaskFormProps, TaskType } from "../../types/common";
+import AddSubtaskButton from "../buttons/AddSubtaskButton";
+import CancelButton from "../buttons/CancelButton";
 import DeleteButton from "../buttons/DeleteButton";
+import SaveButton from "../buttons/SaveButton";
 import TextInput from "../inputs/TextInput";
+import RepetitionOptions from "./RepetitionOptions";
 
 export default function NewTaskForm({ onSave, onCancel }: NewTaskFormProps) {
   const [taskName, setTaskName] = useState<string>("");

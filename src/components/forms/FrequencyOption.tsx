@@ -1,4 +1,4 @@
-import { Fragment, ChangeEvent } from "react";
+import { ChangeEvent, Fragment } from "react";
 
 type FrequencyOptionProps = {
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;

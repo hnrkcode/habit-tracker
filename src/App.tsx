@@ -1,14 +1,15 @@
-import { useState } from "react";
-import Tasks from "./components/tasks/Tasks";
-import Navbar from "./components/Navbar";
-import Modal from "./components/Modal";
-import NewTaskForm from "./components/forms/NewTaskForm";
-import EditTaskForm from "./components/forms/EditTaskForm";
-import DateSlider from "./components/dates/DateSlider";
-import { TaskType, TasksType } from "./types/common";
 import dayjs from "dayjs";
+import { useState } from "react";
 import { RRule } from "rrule";
+
+import DateSlider from "./components/dates/DateSlider";
+import EditTaskForm from "./components/forms/EditTaskForm";
+import NewTaskForm from "./components/forms/NewTaskForm";
+import Modal from "./components/Modal";
+import Navbar from "./components/Navbar";
+import Tasks from "./components/tasks/Tasks";
 import initialTasks from "./data.json";
+import { TasksType, TaskType } from "./types/common";
 
 export default function App() {
   const [tasks, setTasks] = useState<TasksType>(initialTasks);

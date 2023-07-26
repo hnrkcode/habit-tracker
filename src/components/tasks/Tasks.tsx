@@ -1,5 +1,5 @@
-import Task from "./Task";
 import { TasksProps } from "../../types/common";
+import Task from "./Task";
 
 export default function Tasks({
   tasks,

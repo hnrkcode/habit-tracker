@@ -1,4 +1,5 @@
 import { ChangeEvent } from "react";
+
 import { RepetitionOptionsProps } from "../../types/common";
 import FrequencyOption from "./FrequencyOption";
 import IntervalOption from "./IntervalOption";

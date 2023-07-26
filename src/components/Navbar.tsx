@@ -1,4 +1,5 @@
 import { FaPlus } from "react-icons/fa";
+
 import { NavbarProps } from "../types/common";
 
 export default function Navbar({ onAddTask }: NavbarProps) {
