@@ -20,7 +20,7 @@ export default function TaskItem({
           type="checkbox"
           className="mr-2"
           checked={done}
-          onChange={() => onCheckbox && onCheckbox(id)}
+          onChange={() => onCheckbox(id)}
         />
         <span className="mr-2">{name}</span>
         <FaPen onClick={() => onEditTask(id)} />

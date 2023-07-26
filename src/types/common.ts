@@ -59,7 +59,7 @@ export type TaskItemProps = {
   hasSubtasks: boolean;
   showSubtasks?: boolean | undefined;
   onToggle?: () => void | undefined;
-  onCheckbox?: (id: string) => void | undefined;
+  onCheckbox: (id: string) => void;
   onEditTask: (id: string) => void;
 };
 
@@ -67,7 +67,7 @@ export type SubtaskItemProps = {
   id: string;
   name: string;
   done: boolean;
-  onCheckbox: (id: string) => void | undefined;
+  onCheckbox: (id: string) => void;
 };
 
 export type NavbarProps = {
