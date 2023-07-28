@@ -9,14 +9,12 @@ export default function Subtasks({
 }: SubtasksProps) {
   return (
     <ul className="list-none pl-12">
-      {subtasks.map((subtask) => (
+      {subtasks.map(({ subtaskId, name, done }) => (
         <Subtask
-          key={subtask.subtaskId}
-          taskId={taskId}
-          subtaskId={subtask.subtaskId}
-          name={subtask.name}
-          done={subtask.done.includes(selectedDate)}
-          onSubtaskCheckbox={onSubtaskCheckbox}
+          key={subtaskId}
+          name={name}
+          done={done.includes(selectedDate)}
+          onSubtaskCheckbox={() => onSubtaskCheckbox(taskId, subtaskId)}
         />
       ))}
     </ul>

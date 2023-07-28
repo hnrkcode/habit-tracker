@@ -27,11 +27,9 @@ export type CardProps = {
 };
 
 export type SubtaskProps = {
-  taskId: string;
-  subtaskId: string;
   name: string;
   done: boolean;
-  onSubtaskCheckbox: (taskId: string, subtaskId: string) => void;
+  onSubtaskCheckbox: () => void;
 };
 
 export type SubtasksProps = {
