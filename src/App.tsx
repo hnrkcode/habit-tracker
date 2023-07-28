@@ -29,15 +29,13 @@ export default function App() {
 
   const filteredTasks = tasks.filter((task) => {
     const rule = RRule.fromString(task.rrule);
-    const pastDate = dayjs(selectedDate).subtract(5, "day").toDate();
-    const futureDate = dayjs(selectedDate).add(5, "day").toDate();
-    const occurrences = rule.between(pastDate, futureDate);
+    const selectedDateObj = dayjs(selectedDate);
+    const pastDate = selectedDateObj.subtract(1, "day").toDate();
+    const futureDate = selectedDateObj.add(1, "day").toDate();
 
-    if (occurrences.some((date) => dayjs(date).isSame(selectedDate, "day"))) {
-      return true;
-    }
-
-    return false;
+    return rule
+      .between(pastDate, futureDate)
+      .some((date) => dayjs(date).isSame(selectedDateObj, "day"));
   });
 
   function handleModal(action: ModalActionType) {
