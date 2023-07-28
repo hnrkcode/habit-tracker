@@ -13,8 +13,7 @@ import { TasksType, TaskType } from "./types/common";
 
 export default function App() {
   const [tasks, setTasks] = useState<TasksType>(initialTasks);
-  const [showModal, setShowModal] = useState(false);
-  const [modalAction, setModalAction] = useState("create");
+  const [modalAction, setModalAction] = useState("closed");
   const [editTaskId, setEditTaskId] = useState("");
   const [selectedDate, setSelectedDate] = useState(
     dayjs().format("YYYY-MM-DD")
@@ -34,13 +33,12 @@ export default function App() {
   });
 
   function handleModal(action: string) {
-    setShowModal(!showModal);
     setModalAction(action);
   }
 
   function handleCreateTask(task: TaskType) {
     setTasks((prevTasks) => [...prevTasks, task]);
-    setShowModal(!showModal);
+    setModalAction("closed");
   }
 
   function handleEditTask(task: TaskType) {
@@ -56,12 +54,12 @@ export default function App() {
       )
     );
 
-    setShowModal(!showModal);
+    setModalAction("closed");
   }
 
   function handleDeleteTask(taskId: string) {
     setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
-    setShowModal(!showModal);
+    setModalAction("closed");
   }
 
   function handleOpenCreateModal() {
@@ -74,7 +72,7 @@ export default function App() {
   }
 
   function handleCloseModal() {
-    setShowModal(!showModal);
+    setModalAction("closed");
   }
 
   function handleTaskCheckbox(id: string) {
@@ -157,7 +155,7 @@ export default function App() {
         onSubtaskCheckbox={handleSubTaskCheckbox}
         onEditTask={handleOpenEditModal}
       />
-      <Modal isOpen={showModal} onClose={handleCloseModal}>
+      <Modal isOpen={modalAction !== "closed"} onClose={handleCloseModal}>
         {modalAction === "create" && (
           <NewTaskForm onSave={handleCreateTask} onCancel={handleCloseModal} />
         )}
