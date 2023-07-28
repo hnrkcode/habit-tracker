@@ -4,7 +4,7 @@ import { TouchEvent, useState, WheelEvent } from "react";
 import { DateSliderProps } from "../../types/common";
 import DateItem from "./DateItem";
 
-function generateSliderDates(scrollPosition: number) {
+function generateSliderDates(scrollPosition: number): dayjs.Dayjs[] {
   const now = dayjs();
   const initialIndex = 3;
   const dates = Array.from({ length: 7 }, (_, index) =>
