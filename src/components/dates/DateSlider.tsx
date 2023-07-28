@@ -4,46 +4,47 @@ import { TouchEvent, useState, WheelEvent } from "react";
 import { DateSliderProps } from "../../types/common";
 import DateItem from "./DateItem";
 
+function generateSliderDates(scrollPosition: number) {
+  const now = dayjs();
+  const initialIndex = 3;
+  const dates = Array.from({ length: 7 }, (_, index) =>
+    now.add(index + scrollPosition - initialIndex, "day")
+  );
+
+  return dates;
+}
+
 export default function DateSlider({
   selectedDate,
   onSelectDate,
 }: DateSliderProps) {
   const [scrollPosition, setScrollPosition] = useState(0);
-  const currentDate = dayjs();
-  const datesArray = Array.from({ length: 7 }, (_, index) =>
-    currentDate.add(index + scrollPosition - 3, "day")
-  );
+  const dates = generateSliderDates(scrollPosition);
 
   function handleWheelScroll(event: WheelEvent) {
-    const newScrollPosition = Math.ceil(
-      scrollPosition - Math.sign(event.deltaY)
-    );
-    setScrollPosition(newScrollPosition);
+    setScrollPosition(Math.ceil(scrollPosition - Math.sign(event.deltaY)));
   }
 
   function handleTouchScroll(event: TouchEvent) {
-    const touch = event.touches[0];
-    const startX = touch.clientX;
-    let newScrollPosition = scrollPosition;
+    const { target, touches } = event;
+    const startX = touches[0].clientX;
 
-    function onTouchMove(event: TouchEvent) {
-      const touchMove = event.touches[0];
-      const deltaX = touchMove.clientX - startX;
-      newScrollPosition = scrollPosition - deltaX / 50;
-      setScrollPosition(newScrollPosition);
-    }
+    const onTouchMove = (event: TouchEvent) => {
+      const { clientX } = event.touches[0];
+      const deltaX = clientX - startX;
+      setScrollPosition(scrollPosition - deltaX / 50);
+    };
 
-    function onTouchEnd() {
-      event.target.removeEventListener(
+    const onTouchEnd = () => {
+      target.removeEventListener("touchend", onTouchEnd);
+      target.removeEventListener(
         "touchmove",
         onTouchMove as unknown as EventListener
       );
+    };
 
-      event.target.removeEventListener("touchend", onTouchEnd);
-    }
-
-    event.target.addEventListener("touchend", onTouchEnd);
-    event.target.addEventListener(
+    target.addEventListener("touchend", onTouchEnd);
+    target.addEventListener(
       "touchmove",
       onTouchMove as unknown as EventListener
     );
@@ -55,7 +56,7 @@ export default function DateSlider({
       onWheel={handleWheelScroll}
       onTouchMove={handleTouchScroll}
     >
-      {datesArray.map((date, index) => {
+      {dates.map((date, index) => {
         const isSelectedDate = date.format("YYYY-MM-DD") === selectedDate;
         const borderColor = isSelectedDate
           ? "border-sky-500"
@@ -65,7 +66,7 @@ export default function DateSlider({
           <div
             className={`select-none cursor-pointer p-1 m-1 border-2 rounded-lg ${borderColor}`}
             key={index + scrollPosition}
-            onClick={() => onSelectDate(index, scrollPosition, datesArray)}
+            onClick={() => onSelectDate(index, scrollPosition, dates)}
           >
             <DateItem date={date} />
           </div>
