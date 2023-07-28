@@ -98,7 +98,12 @@ export type EditTaskFormProps = {
 };
 
 export type DateSliderProps = {
-  onSelectDate: (date: string) => void;
+  selectedDate: string;
+  onSelectDate: (
+    index: number,
+    scrollPos: number,
+    dates: dayjs.Dayjs[]
+  ) => void;
 };
 
 export type RepetitionOptionsProps = {

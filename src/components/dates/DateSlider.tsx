@@ -4,24 +4,20 @@ import { TouchEvent, useState, WheelEvent } from "react";
 import { DateSliderProps } from "../../types/common";
 import DateItem from "./DateItem";
 
-export default function DateSlider({ onSelectDate }: DateSliderProps) {
-  const [selectedDateIndex, setSelectedDateIndex] = useState(3);
+export default function DateSlider({
+  selectedDate,
+  onSelectDate,
+}: DateSliderProps) {
   const [scrollPosition, setScrollPosition] = useState(0);
   const currentDate = dayjs();
   const datesArray = Array.from({ length: 7 }, (_, index) =>
     currentDate.add(index + scrollPosition - 3, "day")
   );
 
-  function handleDateClick(index: number) {
-    const selectedDate =
-      datesArray[Math.ceil(index) - Math.ceil(scrollPosition)];
-
-    setSelectedDateIndex(index);
-    onSelectDate(selectedDate.format("YYYY-MM-DD"));
-  }
-
   function handleWheelScroll(event: WheelEvent) {
-    const newScrollPosition = scrollPosition - Math.sign(event.deltaY);
+    const newScrollPosition = Math.ceil(
+      scrollPosition - Math.sign(event.deltaY)
+    );
     setScrollPosition(newScrollPosition);
   }
 
@@ -30,8 +26,8 @@ export default function DateSlider({ onSelectDate }: DateSliderProps) {
     const startX = touch.clientX;
     let newScrollPosition = scrollPosition;
 
-    function onTouchMove(e: TouchEvent) {
-      const touchMove = e.touches[0];
+    function onTouchMove(event: TouchEvent) {
+      const touchMove = event.touches[0];
       const deltaX = touchMove.clientX - startX;
       newScrollPosition = scrollPosition - deltaX / 50;
       setScrollPosition(newScrollPosition);
@@ -59,19 +55,22 @@ export default function DateSlider({ onSelectDate }: DateSliderProps) {
       onWheel={handleWheelScroll}
       onTouchMove={handleTouchScroll}
     >
-      {datesArray.map((date, index) => (
-        <div
-          className={`select-none cursor-pointer p-1 m-1${
-            selectedDateIndex === index + scrollPosition
-              ? " border-sky-500 border-2 rounded-lg"
-              : ""
-          }`}
-          key={index + scrollPosition}
-          onClick={() => handleDateClick(index + scrollPosition)}
-        >
-          <DateItem date={date} />
-        </div>
-      ))}
+      {datesArray.map((date, index) => {
+        const isSelectedDate = date.format("YYYY-MM-DD") === selectedDate;
+        const borderColor = isSelectedDate
+          ? "border-sky-500"
+          : "border-transparent";
+
+        return (
+          <div
+            className={`select-none cursor-pointer p-1 m-1 border-2 rounded-lg ${borderColor}`}
+            key={index + scrollPosition}
+            onClick={() => onSelectDate(index, scrollPosition, datesArray)}
+          >
+            <DateItem date={date} />
+          </div>
+        );
+      })}
     </div>
   );
 }

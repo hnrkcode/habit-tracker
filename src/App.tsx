@@ -152,10 +152,23 @@ export default function App() {
     );
   }
 
+  function handleOnSelectDate(
+    index: number,
+    scrollPos: number,
+    dates: dayjs.Dayjs[]
+  ) {
+    const dateIndex = Math.ceil(index + scrollPos) - Math.ceil(scrollPos);
+    const newSelectedDate = dates[dateIndex];
+    setSelectedDate(newSelectedDate.format("YYYY-MM-DD"));
+  }
+
   return (
     <>
       <Navbar onAddTask={handleOpenCreateModal} />
-      <DateSlider onSelectDate={setSelectedDate} />
+      <DateSlider
+        selectedDate={selectedDate}
+        onSelectDate={handleOnSelectDate}
+      />
       <Tasks
         tasks={filteredTasks}
         selectedDate={selectedDate}
