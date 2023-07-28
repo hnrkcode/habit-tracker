@@ -44,9 +44,22 @@ export default function App() {
     setModalAction(action);
   }
 
+  function handleOpenCreateModal() {
+    handleModal(ModalAction.Create);
+  }
+
+  function handleOpenEditModal(id: string) {
+    handleModal(ModalAction.Edit);
+    setEditTaskId(id);
+  }
+
+  function handleCloseModal() {
+    setModalAction(ModalAction.Closed);
+  }
+
   function handleCreateTask(task: TaskType) {
     setTasks((prevTasks) => [...prevTasks, task]);
-    setModalAction(ModalAction.Closed);
+    handleCloseModal();
   }
 
   function handleEditTask(task: TaskType) {
@@ -62,25 +75,12 @@ export default function App() {
       )
     );
 
-    setModalAction(ModalAction.Closed);
+    handleCloseModal();
   }
 
   function handleDeleteTask(taskId: string) {
     setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
-    setModalAction(ModalAction.Closed);
-  }
-
-  function handleOpenCreateModal() {
-    handleModal(ModalAction.Create);
-  }
-
-  function handleOpenEditModal(id: string) {
-    handleModal(ModalAction.Edit);
-    setEditTaskId(id);
-  }
-
-  function handleCloseModal() {
-    setModalAction(ModalAction.Closed);
+    handleCloseModal();
   }
 
   function handleTaskCheckbox(id: string) {
