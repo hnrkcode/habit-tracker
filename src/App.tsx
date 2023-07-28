@@ -9,11 +9,19 @@ import Modal from "./components/Modal";
 import Navbar from "./components/Navbar";
 import Tasks from "./components/tasks/Tasks";
 import initialTasks from "./data.json";
-import { TasksType, TaskType } from "./types/common";
+import { ModalActionType, TasksType, TaskType } from "./types/common";
+
+enum ModalAction {
+  Create = "create",
+  Edit = "edit",
+  Closed = "closed",
+}
 
 export default function App() {
   const [tasks, setTasks] = useState<TasksType>(initialTasks);
-  const [modalAction, setModalAction] = useState("closed");
+  const [modalAction, setModalAction] = useState<ModalActionType>(
+    ModalAction.Closed
+  );
   const [editTaskId, setEditTaskId] = useState("");
   const [selectedDate, setSelectedDate] = useState(
     dayjs().format("YYYY-MM-DD")
@@ -32,13 +40,13 @@ export default function App() {
     return false;
   });
 
-  function handleModal(action: string) {
+  function handleModal(action: ModalActionType) {
     setModalAction(action);
   }
 
   function handleCreateTask(task: TaskType) {
     setTasks((prevTasks) => [...prevTasks, task]);
-    setModalAction("closed");
+    setModalAction(ModalAction.Closed);
   }
 
   function handleEditTask(task: TaskType) {
@@ -54,25 +62,25 @@ export default function App() {
       )
     );
 
-    setModalAction("closed");
+    setModalAction(ModalAction.Closed);
   }
 
   function handleDeleteTask(taskId: string) {
     setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
-    setModalAction("closed");
+    setModalAction(ModalAction.Closed);
   }
 
   function handleOpenCreateModal() {
-    handleModal("create");
+    handleModal(ModalAction.Create);
   }
 
   function handleOpenEditModal(id: string) {
-    handleModal("edit");
+    handleModal(ModalAction.Edit);
     setEditTaskId(id);
   }
 
   function handleCloseModal() {
-    setModalAction("closed");
+    setModalAction(ModalAction.Closed);
   }
 
   function handleTaskCheckbox(id: string) {
@@ -155,11 +163,14 @@ export default function App() {
         onSubtaskCheckbox={handleSubTaskCheckbox}
         onEditTask={handleOpenEditModal}
       />
-      <Modal isOpen={modalAction !== "closed"} onClose={handleCloseModal}>
-        {modalAction === "create" && (
+      <Modal
+        isOpen={modalAction !== ModalAction.Closed}
+        onClose={handleCloseModal}
+      >
+        {modalAction === ModalAction.Create && (
           <NewTaskForm onSave={handleCreateTask} onCancel={handleCloseModal} />
         )}
-        {modalAction === "edit" && (
+        {modalAction === ModalAction.Edit && (
           <EditTaskForm
             taskId={editTaskId}
             tasks={tasks}

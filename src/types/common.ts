@@ -5,6 +5,8 @@ export type TasksType = TaskType[];
 
 export type SubtasksType = SubtaskType[];
 
+export type ModalActionType = "create" | "edit" | "closed";
+
 export type TaskType = {
   id: string;
   name: string;
