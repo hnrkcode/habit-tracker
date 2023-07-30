@@ -1,6 +1,10 @@
 import dayjs from "dayjs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { RRule } from "rrule";
+
+import { Auth } from "@supabase/auth-ui-react";
+import { ThemeSupa } from "@supabase/auth-ui-shared";
+import { Session } from "@supabase/supabase-js";
 
 import DateSlider from "./components/dates/DateSlider";
 import EditTaskForm from "./components/forms/EditTaskForm";
@@ -9,6 +13,7 @@ import Modal from "./components/Modal";
 import Navbar from "./components/Navbar";
 import Tasks from "./components/tasks/Tasks";
 import initialTasks from "./data.json";
+import { supabaseClient } from "./supabase-client";
 import { ModalActionType, TasksType, TaskType } from "./types/common";
 
 enum ModalAction {
@@ -26,6 +31,24 @@ export default function App() {
   const [selectedDate, setSelectedDate] = useState(
     dayjs().format("YYYY-MM-DD")
   );
+  const [session, setSession] = useState<Session | null>(null);
+
+  useEffect(() => {
+    supabaseClient.auth
+      .getSession()
+      .then(({ data: { session } }) => {
+        setSession(session);
+      })
+      .catch((error) => console.error(error));
+
+    const {
+      data: { subscription },
+    } = supabaseClient.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   const filteredTasks = tasks.filter((task) => {
     const rule = RRule.fromString(task.rrule);
@@ -160,7 +183,15 @@ export default function App() {
     setSelectedDate(newSelectedDate.format("YYYY-MM-DD"));
   }
 
-  return (
+  return !session?.user ? (
+    <Auth
+      supabaseClient={supabaseClient}
+      appearance={{
+        theme: ThemeSupa,
+      }}
+      providers={[]}
+    />
+  ) : (
     <>
       <Navbar onAddTask={handleOpenCreateModal} />
       <DateSlider
