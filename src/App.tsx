@@ -1,26 +1,29 @@
-import dayjs from "dayjs";
-import { useEffect, useState } from "react";
-import { RRule } from "rrule";
+import dayjs from 'dayjs';
+import { createContext, useState } from 'react';
+import { RRule } from 'rrule';
 
-import { Auth } from "@supabase/auth-ui-react";
-import { ThemeSupa } from "@supabase/auth-ui-shared";
-import { Session } from "@supabase/supabase-js";
+import { Auth } from '@supabase/auth-ui-react';
+import { ThemeSupa } from '@supabase/auth-ui-shared';
+import { Session } from '@supabase/supabase-js';
 
-import DateSlider from "./components/dates/DateSlider";
-import EditTaskForm from "./components/forms/EditTaskForm";
-import NewTaskForm from "./components/forms/NewTaskForm";
-import Modal from "./components/Modal";
-import Navbar from "./components/Navbar";
-import Tasks from "./components/tasks/Tasks";
-import initialTasks from "./data.json";
-import { supabaseClient } from "./supabase-client";
-import { ModalActionType, TasksType, TaskType } from "./types/common";
+import DateSlider from './components/dates/DateSlider';
+import EditTaskForm from './components/forms/EditTaskForm';
+import NewTaskForm from './components/forms/NewTaskForm';
+import Modal from './components/Modal';
+import Navbar from './components/Navbar';
+import Tasks from './components/tasks/Tasks';
+import initialTasks from './data.json';
+import { useSession } from './hooks/use-session';
+import { supabaseClient } from './supabase-client';
+import { ModalActionType, TasksType, TaskType } from './types/common';
 
 enum ModalAction {
   Create = "create",
   Edit = "edit",
   Closed = "closed",
 }
+
+const SessionContext = createContext<Session | null>(null);
 
 export default function App() {
   const [tasks, setTasks] = useState<TasksType>(initialTasks);
@@ -31,24 +34,8 @@ export default function App() {
   const [selectedDate, setSelectedDate] = useState(
     dayjs().format("YYYY-MM-DD")
   );
-  const [session, setSession] = useState<Session | null>(null);
 
-  useEffect(() => {
-    supabaseClient.auth
-      .getSession()
-      .then(({ data: { session } }) => {
-        setSession(session);
-      })
-      .catch((error) => console.error(error));
-
-    const {
-      data: { subscription },
-    } = supabaseClient.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-    });
-
-    return () => subscription.unsubscribe();
-  }, []);
+  const session = useSession();
 
   const filteredTasks = tasks.filter((task) => {
     const rule = RRule.fromString(task.rrule);
@@ -183,45 +170,52 @@ export default function App() {
     setSelectedDate(newSelectedDate.format("YYYY-MM-DD"));
   }
 
-  return !session?.user ? (
-    <Auth
-      supabaseClient={supabaseClient}
-      appearance={{
-        theme: ThemeSupa,
-      }}
-      providers={[]}
-    />
-  ) : (
-    <>
-      <Navbar onAddTask={handleOpenCreateModal} />
-      <DateSlider
-        selectedDate={selectedDate}
-        onSelectDate={handleOnSelectDate}
-      />
-      <Tasks
-        tasks={filteredTasks}
-        selectedDate={selectedDate}
-        onTaskCheckbox={handleTaskCheckbox}
-        onSubtaskCheckbox={handleSubTaskCheckbox}
-        onEditTask={handleOpenEditModal}
-      />
-      <Modal
-        isOpen={modalAction !== ModalAction.Closed}
-        onClose={handleCloseModal}
-      >
-        {modalAction === ModalAction.Create && (
-          <NewTaskForm onSave={handleCreateTask} onCancel={handleCloseModal} />
-        )}
-        {modalAction === ModalAction.Edit && (
-          <EditTaskForm
-            taskId={editTaskId}
-            tasks={tasks}
-            onSave={handleEditTask}
-            onDelete={handleDeleteTask}
-            onCancel={handleCloseModal}
+  return (
+    <SessionContext.Provider value={session}>
+      {!session?.user ? (
+        <Auth
+          supabaseClient={supabaseClient}
+          appearance={{
+            theme: ThemeSupa,
+          }}
+          providers={[]}
+        />
+      ) : (
+        <>
+          <Navbar onAddTask={handleOpenCreateModal} />
+          <DateSlider
+            selectedDate={selectedDate}
+            onSelectDate={handleOnSelectDate}
           />
-        )}
-      </Modal>
-    </>
+          <Tasks
+            tasks={filteredTasks}
+            selectedDate={selectedDate}
+            onTaskCheckbox={handleTaskCheckbox}
+            onSubtaskCheckbox={handleSubTaskCheckbox}
+            onEditTask={handleOpenEditModal}
+          />
+          <Modal
+            isOpen={modalAction !== ModalAction.Closed}
+            onClose={handleCloseModal}
+          >
+            {modalAction === ModalAction.Create && (
+              <NewTaskForm
+                onSave={handleCreateTask}
+                onCancel={handleCloseModal}
+              />
+            )}
+            {modalAction === ModalAction.Edit && (
+              <EditTaskForm
+                taskId={editTaskId}
+                tasks={tasks}
+                onSave={handleEditTask}
+                onDelete={handleDeleteTask}
+                onCancel={handleCloseModal}
+              />
+            )}
+          </Modal>
+        </>
+      )}
+    </SessionContext.Provider>
   );
 }
