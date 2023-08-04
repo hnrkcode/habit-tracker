@@ -11,12 +11,13 @@ interface Headers {
   [key: string]: string;
 }
 
-const httpLink = createHttpLink({
-  uri: `${supabaseUrl}/graphql/v1`,
-});
-
+const { VITE_SUPABASE_ENVIRONMENT } = import.meta.env;
+const isDevEnv = VITE_SUPABASE_ENVIRONMENT === "development";
+const httpLink = createHttpLink({ uri: `${supabaseUrl}/graphql/v1` });
 const authLink = setContext((_, { headers }) => {
-  const token = localStorage.getItem("sb-localhost-auth-token");
+  const token = localStorage.getItem(
+    isDevEnv ? "sb-localhost-auth-token" : "sb-access-token"
+  );
   const parsedToken = token ? (JSON.parse(token) as Token) : null;
   const accessToken = parsedToken?.access_token || null;
 
@@ -32,6 +33,7 @@ export function createApolloClient() {
   const client = new ApolloClient({
     link: authLink.concat(httpLink),
     cache: new InMemoryCache(),
+    connectToDevTools: isDevEnv,
   });
 
   return client;
