@@ -1,12 +1,28 @@
-import './index.css';
+import "./index.css";
 
-import React from 'react';
-import ReactDOM from 'react-dom/client';
+import React from "react";
+import ReactDOM from "react-dom/client";
 
-import App from './App.tsx';
+import { ApolloProvider } from "@apollo/client";
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+import { createApolloClient } from "./apollo-client";
+import App from "./App.tsx";
+import { SessionContext } from "./context/SessionContext.ts";
+import { useSession } from "./hooks/use-session.ts";
+
+const apolloClient = createApolloClient();
+
+export function Root() {
+  const session = useSession();
+  return (
+    <SessionContext.Provider value={session}>
+      <ApolloProvider client={apolloClient}>
+        <React.StrictMode>
+          <App />
+        </React.StrictMode>
+      </ApolloProvider>
+    </SessionContext.Provider>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")!).render(<Root />);

@@ -115,3 +115,48 @@ export type RepetitionOptionsProps = {
 export type DateItemProps = {
   date: dayjs.Dayjs;
 };
+
+export interface TaskData {
+  tasksCollection: {
+    edges: TaskEdge[];
+  };
+}
+
+export interface TaskEdge {
+  node: {
+    id: string;
+    name: string;
+    rrule: string | null;
+    completed_tasksCollection?: {
+      edges: CompletedTaskEdge[];
+    };
+    subtasksCollection?: {
+      edges: SubtaskEdge[];
+    };
+  };
+}
+
+export interface CompletedTaskEdge {
+  node: {
+    task_id: string;
+    completion_date: string;
+  };
+}
+
+export interface SubtaskEdge {
+  node: {
+    task_id: string;
+    id: string;
+    name: string;
+    completed_subtasksCollection?: {
+      edges: CompletedSubtaskEdge[];
+    };
+  };
+}
+
+export interface CompletedSubtaskEdge {
+  node: {
+    subtask_id: string;
+    completion_date: string;
+  };
+}

@@ -1,21 +1,28 @@
-import dayjs from 'dayjs';
-import { createContext, useState } from 'react';
-import { RRule } from 'rrule';
+import dayjs from "dayjs";
+import { useContext, useEffect, useState } from "react";
+import { RRule } from "rrule";
 
-import { Auth } from '@supabase/auth-ui-react';
-import { ThemeSupa } from '@supabase/auth-ui-shared';
-import { Session } from '@supabase/supabase-js';
+import { useQuery } from "@apollo/client";
+import { Auth } from "@supabase/auth-ui-react";
+import { ThemeSupa } from "@supabase/auth-ui-shared";
 
-import DateSlider from './components/dates/DateSlider';
-import EditTaskForm from './components/forms/EditTaskForm';
-import NewTaskForm from './components/forms/NewTaskForm';
-import Modal from './components/Modal';
-import Navbar from './components/Navbar';
-import Tasks from './components/tasks/Tasks';
-import initialTasks from './data.json';
-import { useSession } from './hooks/use-session';
-import { supabaseClient } from './supabase-client';
-import { ModalActionType, TasksType, TaskType } from './types/common';
+import DateSlider from "./components/dates/DateSlider";
+import EditTaskForm from "./components/forms/EditTaskForm";
+import NewTaskForm from "./components/forms/NewTaskForm";
+import Modal from "./components/Modal";
+import Navbar from "./components/Navbar";
+import Tasks from "./components/tasks/Tasks";
+import { SessionContext } from "./context/SessionContext";
+import { GET_TASKS } from "./queries/getTasks";
+import { supabaseClient } from "./supabase-client";
+import {
+  ModalActionType,
+  SubtaskEdge,
+  TaskData,
+  TaskEdge,
+  TasksType,
+  TaskType,
+} from "./types/common";
 
 enum ModalAction {
   Create = "create",
@@ -23,10 +30,11 @@ enum ModalAction {
   Closed = "closed",
 }
 
-const SessionContext = createContext<Session | null>(null);
-
 export default function App() {
-  const [tasks, setTasks] = useState<TasksType>(initialTasks);
+  const session = useContext(SessionContext);
+  const { loading, data } = useQuery<TaskData>(GET_TASKS);
+
+  const [tasks, setTasks] = useState<TasksType>([]);
   const [modalAction, setModalAction] = useState<ModalActionType>(
     ModalAction.Closed
   );
@@ -35,10 +43,39 @@ export default function App() {
     dayjs().format("YYYY-MM-DD")
   );
 
-  const session = useSession();
+  useEffect(() => {
+    const mapSubtask = (edge: SubtaskEdge) => {
+      const subtasksCompleted = edge.node.completed_subtasksCollection?.edges;
+      return {
+        taskId: edge.node.task_id,
+        subtaskId: edge.node.id,
+        name: edge.node.name,
+        done: subtasksCompleted?.map((edge) => edge.node.completion_date),
+      };
+    };
+
+    const mapTask = (task: TaskEdge) => {
+      const taskCompleted = task.node.completed_tasksCollection?.edges;
+      const subtasks = task.node.subtasksCollection?.edges;
+      return {
+        id: task.node.id,
+        name: task.node.name,
+        rrule: task.node.rrule,
+        done: taskCompleted?.map((edge) => edge.node.completion_date),
+        subtasks: subtasks?.map(mapSubtask),
+      };
+    };
+
+    let transformedTasks: TasksType = [];
+
+    if (!loading) {
+      transformedTasks = data?.tasksCollection.edges.map(mapTask) as TasksType;
+      setTasks(transformedTasks);
+    }
+  }, [loading, data]);
 
   const filteredTasks = tasks.filter((task) => {
-    const rule = RRule.fromString(task.rrule);
+    const rule = RRule.fromString(task.rrule.replace("\\n", "\n"));
     const selectedDateObj = dayjs(selectedDate);
     const pastDate = selectedDateObj.subtract(1, "day").toDate();
     const futureDate = selectedDateObj.add(1, "day").toDate();
@@ -171,7 +208,7 @@ export default function App() {
   }
 
   return (
-    <SessionContext.Provider value={session}>
+    <>
       {!session?.user ? (
         <Auth
           supabaseClient={supabaseClient}
@@ -216,6 +253,6 @@ export default function App() {
           </Modal>
         </>
       )}
-    </SessionContext.Provider>
+    </>
   );
 }
