@@ -1,14 +1,39 @@
 import dayjs from "dayjs";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useContext, useState } from "react";
 import { RRule, Weekday } from "rrule";
 
-import { NewTaskFormProps, TaskType } from "../../types/common";
+import { FetchResult, useMutation } from "@apollo/client";
+
+import { SessionContext } from "../../context/SessionContext";
+import { CREATE_SUBTASKS } from "../../mutations/createSubtasks";
+import { CREATE_TASK } from "../../mutations/createTask";
+import { NewTaskFormProps } from "../../types/common";
 import AddSubtaskButton from "../buttons/AddSubtaskButton";
 import CancelButton from "../buttons/CancelButton";
 import DeleteButton from "../buttons/DeleteButton";
 import SaveButton from "../buttons/SaveButton";
 import TextInput from "../inputs/TextInput";
 import RepetitionOptions from "./RepetitionOptions";
+
+interface InsertTasksResult {
+  insertIntotasksCollection: {
+    records: {
+      id: string;
+      name: string;
+      rrule: string;
+    }[];
+  };
+}
+
+interface InsertSubtasksResult {
+  insertIntosubtasksCollection: {
+    records: {
+      task_id: string;
+      id: string;
+      name: string;
+    }[];
+  };
+}
 
 export default function NewTaskForm({ onSave, onCancel }: NewTaskFormProps) {
   const [taskName, setTaskName] = useState<string>("");
@@ -17,6 +42,10 @@ export default function NewTaskForm({ onSave, onCancel }: NewTaskFormProps) {
   const [frequency, setFrequency] = useState<string | null>(null);
   const [interval, setInterval] = useState<number>(1);
   const [weekdays, setWeekdays] = useState<string[]>([]);
+
+  const session = useContext(SessionContext);
+  const [createTask] = useMutation(CREATE_TASK);
+  const [createSubtasks] = useMutation(CREATE_SUBTASKS);
 
   function handleSelectedFrequency(value: string) {
     setFrequency(value);
@@ -65,12 +94,13 @@ export default function NewTaskForm({ onSave, onCancel }: NewTaskFormProps) {
   }
 
   function handleSave() {
-    if (
+    const isInvalidTask =
       taskName === "" ||
       frequency === null ||
       (frequency === "weekly" && weekdays.length === 0) ||
-      subtaskNames.some((subtaskName) => subtaskName === "")
-    ) {
+      subtaskNames.some((subtaskName) => subtaskName === "");
+
+    if (isInvalidTask) {
       setHasErrors(true);
       return;
     }
@@ -92,26 +122,66 @@ export default function NewTaskForm({ onSave, onCancel }: NewTaskFormProps) {
       dtstart: dayjs().toDate(),
     });
 
-    let newTask: TaskType = {
-      id: `${crypto.randomUUID()}`,
-      name: taskName,
-      done: [],
-      rrule: rule.toString(),
-    };
+    let taskRecord:
+      | {
+          id: string;
+          name: string;
+          rrule: string;
+        }
+      | undefined = undefined;
 
-    if (subtaskNames.length > 0) {
-      newTask = {
-        ...newTask,
-        subtasks: subtaskNames.map((subtaskName) => ({
-          taskId: newTask.id,
-          subtaskId: `${crypto.randomUUID()}`,
+    createTask({
+      variables: {
+        user_id: session?.user.id,
+        name: taskName,
+        rrule: rule.toString(),
+      },
+    })
+      .then((tasksData: FetchResult<InsertTasksResult>) => {
+        const task_id = tasksData.data?.insertIntotasksCollection.records[0].id;
+        taskRecord = tasksData.data?.insertIntotasksCollection.records[0];
+
+        if (subtaskNames.length === 0) {
+          return undefined;
+        }
+
+        const subtasks = subtaskNames.map((subtaskName) => ({
+          task_id: task_id,
           name: subtaskName,
-          done: [],
-        })),
-      };
-    }
+          user_id: session?.user.id,
+        }));
 
-    onSave(newTask);
+        return createSubtasks({
+          variables: { subtasks },
+        });
+      })
+      .then((subtasksData: FetchResult<InsertSubtasksResult> | undefined) => {
+        const subtaskRecords =
+          subtasksData?.data?.insertIntosubtasksCollection.records.map(
+            (record) => ({
+              taskId: record.task_id,
+              subtaskId: record.id,
+              name: record.name,
+              done: [],
+            })
+          ) || [];
+
+        if (!taskRecord) {
+          setHasErrors(true);
+          return;
+        }
+
+        onSave({
+          id: taskRecord.id,
+          name: taskRecord.name,
+          done: [],
+          rrule: taskRecord.rrule,
+          subtasks: subtaskRecords,
+        });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }
 
   const emptyFieldError = <p className="text-red-500">Can't be empty</p>;

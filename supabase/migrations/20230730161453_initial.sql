@@ -1,5 +1,4 @@
 -- Tables
-
 CREATE TABLE tasks (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4() NOT NULL,
     user_id UUID NOT NULL REFERENCES auth.users (id) ON DELETE CASCADE,
@@ -30,40 +29,19 @@ CREATE TABLE completed_subtasks (
     completion_date DATE NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL
 );
-
 -- Enable Row Level Security (RLS)
 alter table tasks enable row level security;
 alter table subtasks enable row level security;
 alter table completed_tasks enable row level security;
 alter table completed_subtasks enable row level security;
-
 --- RLS policies
-CREATE POLICY "tasks user access policy"
-ON "public"."tasks"
-AS PERMISSIVE FOR SELECT
-TO public
-USING (auth.uid() = user_id);
-
-CREATE POLICY "subtasks user access policy"
-ON "public"."subtasks"
-AS PERMISSIVE FOR SELECT
-TO public
-USING (auth.uid() = user_id);
-
-CREATE POLICY "completed tasks user access policy"
-ON "public"."completed_tasks"
-AS PERMISSIVE FOR SELECT
-TO public
-USING (auth.uid() = user_id);
-
-CREATE POLICY "completed subtasks user access policy"
-ON "public"."completed_subtasks"
-AS PERMISSIVE FOR SELECT
-TO public
-USING (auth.uid() = user_id);
-
+CREATE POLICY "tasks user access policy" ON "public"."tasks" FOR ALL USING (auth.uid() = user_id);
+CREATE POLICY "subtasks user access policy" ON "public"."subtasks" FOR ALL USING (auth.uid() = user_id);
+CREATE POLICY "completed tasks user access policy" ON "public"."completed_tasks" AS PERMISSIVE FOR
+SELECT TO public USING (auth.uid() = user_id);
+CREATE POLICY "completed subtasks user access policy" ON "public"."completed_subtasks" AS PERMISSIVE FOR
+SELECT TO public USING (auth.uid() = user_id);
 -- Triggers
-
 -- Automatically update tasks updated_at column.
 CREATE OR REPLACE FUNCTION update_tasks_updated_at() RETURNS TRIGGER AS $$ BEGIN NEW.updated_at = now();
 RETURN NEW;
@@ -75,7 +53,6 @@ UPDATE ON tasks FOR EACH ROW
         OLD.name IS DISTINCT
         FROM NEW.name
     ) EXECUTE FUNCTION update_tasks_updated_at();
-
 -- Automatically update subtasks updated_at column.
 CREATE OR REPLACE FUNCTION update_subtasks_updated_at() RETURNS TRIGGER AS $$ BEGIN NEW.updated_at = now();
 RETURN NEW;
